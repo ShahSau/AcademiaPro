@@ -1,21 +1,16 @@
 import { Request, Response, NextFunction } from "express";
-import Admin from "../models/Admin";
+import Student from "../models/Student";
 
-const isAdmin = () => {
+const isStudent = () => {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
       const token = req.headers.token as string | undefined;
 
       // Find the user by ID from the token
-      const user = await Admin.findOne({ token }).select("role");
+      const user = await Student.findOne({ token });
 
       if (!user) {
         return res.status(404).json({ message: "User not found" });
-      }
-
-      // Check if user is an admin
-      if (user.role !== "admin") {
-        return res.status(403).json({ message: "Access denied, not an admin" });
       }
 
       next();
@@ -26,4 +21,4 @@ const isAdmin = () => {
   };
 };
 
-export default isAdmin;
+export default isStudent;

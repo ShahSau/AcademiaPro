@@ -6,6 +6,7 @@ import swaggerUI from "swagger-ui-express";
 import specs from "./swagger";
 import connectToDB from "./config/dbConnect";
 import adminRouter from "./routes/adminRouter";
+import academicTermRouter from "./routes/academicTerm";
 
 const app = express();
 app.use(express.json());
@@ -33,6 +34,7 @@ app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
 
 // Routes
 app.use("/api/v1/admins", adminRouter);
+app.use("/api/v1/academic-terms", academicTermRouter);
 
 /**
  * @swagger
