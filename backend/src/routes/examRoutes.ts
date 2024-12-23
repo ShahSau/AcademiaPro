@@ -15,4 +15,4 @@ examRouter.post("/", verifyToken, isTeacher, createExam);
 examRouter.get("/:id", verifyToken, isTeacher, getExam);
 examRouter.put("/:id", verifyToken, isTeacher, updatExam);
 
-module.exports = examRouter;
+export default examRouter;

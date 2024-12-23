@@ -22,4 +22,4 @@ yearGroupRouter
   .put(verifyToken, isAdmin, updateYearGroup)
   .delete(verifyToken, isAdmin, deleteYearGroup);
 
-module.exports = yearGroupRouter;
+export default yearGroupRouter;

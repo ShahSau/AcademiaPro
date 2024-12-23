@@ -7,6 +7,18 @@ import specs from "./swagger";
 import connectToDB from "./config/dbConnect";
 import adminRouter from "./routes/adminRouter";
 import academicTermRouter from "./routes/academicTerm";
+import academicYearRouter from "./routes/academicYear";
+import classLevelRouter from "./routes/classLevel";
+import examResultRouter from "./routes/examRsultsRoute";
+import examRouter from "./routes/examRoutes";
+import programRouter from "./routes/program";
+import questionsRouter from "./routes/questionRoutes";
+import studentRouter from "./routes/studentRouter";
+import subjectRouter from "./routes/subjectsRouter";
+import teacherRouter from "./routes/teacherRouter";
+import yearGroupRouter from "./routes/yearGroups";
+import { globalErrHandler, notFoundErr } from "./middlewares/globalErrHandler";
+
 
 const app = express();
 app.use(express.json());
@@ -34,8 +46,21 @@ app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
 
 // Routes
 app.use("/api/v1/admins", adminRouter);
+app.use("/api/v1/academic-years", academicYearRouter);
 app.use("/api/v1/academic-terms", academicTermRouter);
+app.use("/api/v1/class-levels", classLevelRouter);
+app.use("/api/v1/programs", programRouter);
+app.use("/api/v1/subjects", subjectRouter);
+app.use("/api/v1/year-groups", yearGroupRouter);
+app.use("/api/v1/teachers", teacherRouter);
+app.use("/api/v1/exams", examRouter);
+app.use("/api/v1/students", studentRouter);
+app.use("/api/v1/questions", questionsRouter);
+app.use("/api/v1/exam-results", examResultRouter);
 
+//Error middlewares
+app.use(notFoundErr);
+app.use(globalErrHandler);
 /**
  * @swagger
  * /api/health:
