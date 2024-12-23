@@ -64,4 +64,4 @@ ProgramSchema.pre("save", function (next) {
 
 const Program = mongoose.model("Program", ProgramSchema);
 
-module.exports = Program;
+export default Program;

@@ -83,10 +83,15 @@ const examSchema = new mongoose.Schema(
       ref: "AcademicYear",
       required: true,
     },
+    resultPublished: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
   },
   { timestamps: true }
 );
 
 const Exam = mongoose.model("Exam", examSchema);
 
-module.exports = Exam;
+export default Exam;

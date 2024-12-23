@@ -19,6 +19,9 @@ const adminSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    token: {
+      type: String,
+    },
     role: {
       type: String,
       default: "admin",
@@ -74,4 +77,4 @@ const adminSchema = new mongoose.Schema(
 //model
 const Admin = mongoose.model("Admin", adminSchema);
 
-module.exports = Admin;
+export default Admin;

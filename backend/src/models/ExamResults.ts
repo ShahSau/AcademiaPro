@@ -75,4 +75,4 @@ const examResultSchema = new mongoose.Schema(
 
 const ExamResult = mongoose.model("ExamResult", examResultSchema);
 
-module.exports = ExamResult;
+export default ExamResult;

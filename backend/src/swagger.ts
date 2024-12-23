@@ -6,7 +6,7 @@ const options = {
     info: {
       title: "API Documentation",
       version: "1.0.0",
-      description: "API Documentation for the authentication API endpoints",
+      description: "API Documentation for the AcademiaPro API endpoints",
     },
     servers: [
       {
@@ -14,7 +14,7 @@ const options = {
       },
     ],
   },
-  apis: ["./src/routes/*.ts", "./src/controllers/*.ts"],
+  apis: ["./src/routes/*.ts", "./src/controllers/*.ts", "./src/app.ts"],
 };
 
 const specs = swaggerJsdoc(options);

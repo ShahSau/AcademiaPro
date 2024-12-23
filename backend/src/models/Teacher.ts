@@ -9,6 +9,7 @@ const teacherSchema = new mongoose.Schema(
     email: {
       type: String,
       required: true,
+      unique: true,
     },
     password: {
       type: String,
@@ -22,9 +23,9 @@ const teacherSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    isWitdrawn: {
+    employedCurrently: {
       type: Boolean,
-      default: false,
+      default: true,
     },
     isSuspended: {
       type: Boolean,

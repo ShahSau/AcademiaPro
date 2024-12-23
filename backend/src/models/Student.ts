@@ -18,7 +18,7 @@ interface StudentDocument extends Document {
   isPromotedToLevel300: boolean;
   isPromotedToLevel400: boolean;
   isGraduated: boolean;
-  isWithdrawn: boolean;
+  isExpeled: boolean;
   isSuspended: boolean;
   prefectName?: string;
   yearGraduated?: string;
@@ -90,7 +90,7 @@ const studentSchema = new mongoose.Schema<StudentDocument>(
       type: Boolean,
       default: false,
     },
-    isWithdrawn: {
+    isExpeled: {
       type: Boolean,
       default: false,
     },
