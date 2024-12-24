@@ -22,6 +22,7 @@ interface StudentDocument extends Document {
   isSuspended: boolean;
   prefectName?: string;
   yearGraduated?: string;
+  id: string;
 }
 
 // Define the schema
@@ -103,6 +104,10 @@ const studentSchema = new mongoose.Schema<StudentDocument>(
     },
     yearGraduated: {
       type: String,
+    },
+    id: {
+      type: String,
+      required: true,
     },
   },
   {

@@ -1,12 +1,15 @@
-import Exam from "../../models/Academic/Exam";
-import ExamResult from "../../models/Academic/ExamResults";
-import Student from "../../models/Academic/Student";
-import Admin from "../../models/Staff/Admin";
-import generateToken from "../../utils/generateToken";
-import { hashPassword, isPassMatched } from "../../utils/helpers";
+// import generateToken from "../../utils/generateToken";
+// import { hashPassword, isPassMatched } from "../../utils/helpers";
+//
+import Admin from "../models/Admin";
+import Exam from "../models/Exam";
+import ExamResult from "../models/ExamResults";
+import Student from "../models/Student";
+import generateToken from "../utils/generateToken";
+import { hashPassword, isPassMatched } from "../utils/helpers";
 import type { Request, Response } from "express";
 
-const adminRegisterStudent = async (req: Request, res: Response) => {
+const registerStudentByAdmin = async (req: Request, res: Response) => {
   const { name, email, password, adminEmail } = req.body;
   //find the admin
   const adminFound = await Admin.findOne({ email: adminEmail });
@@ -28,7 +31,7 @@ const adminRegisterStudent = async (req: Request, res: Response) => {
     password: hashedPassword,
   });
   //push teacher into admin
-  adminFound.students.push(studentRegistered?._id);
+  adminFound.students.push(studentRegistered.id);
   await adminFound.save();
   //send student data
   res.status(201).json({
@@ -53,7 +56,7 @@ const loginStudent = async (req: Request, res: Response) => {
     res.status(200).json({
       status: "success",
       message: "Student logged in successfully",
-      data: generateToken(student?._id),
+      data: generateToken((student!._id as unknown as string).toString()),
     });
   }
 };
@@ -62,7 +65,10 @@ const getStudentProfile = async (req: Request, res: Response) => {
   const studentEmail = req.body.email;
   const student = await Student.findOne({ email: studentEmail })
     .select("-password -createdAt -updatedAt")
-    .populate("examResults");
+    .populate({
+      path: "examResults",
+      model: "ExamResult",
+    });
   if (!student) {
     throw new Error("Student not found");
   }
@@ -74,17 +80,20 @@ const getStudentProfile = async (req: Request, res: Response) => {
     program: student?.program,
     dateAtmitted: student?.dateAdmitted,
     isSuspended: student?.isSuspended,
-    isWithdrawn: student?.isWithdrawn,
+    isExpeled: student?.isExpeled,
     studentId: student?.studentId,
     prefectName: student?.prefectName,
   };
 
   //get student exam results
-  const examResults = student?.examResults;
+  const examResults = student.examResults;
   //current exam
   const currentExamResult = examResults[examResults.length - 1];
+
   //check if exam is published
-  const isPublished = currentExamResult?.isPublished;
+  const isPublished =
+    await ExamResult.findById(currentExamResult).select("isPublished");
+
   //send response
   res.status(200).json({
     status: "success",
@@ -177,7 +186,7 @@ const adminUpdateStudent = async (req: Request, res: Response) => {
     email,
     prefectName,
     isSuspended,
-    isWithdrawn,
+    isExpeled,
   } = req.body;
 
   //find the student by id
@@ -197,7 +206,7 @@ const adminUpdateStudent = async (req: Request, res: Response) => {
         program,
         prefectName,
         isSuspended,
-        isWithdrawn,
+        isExpeled,
       },
       $addToSet: {
         classLevels,
@@ -224,7 +233,10 @@ const writeExam = async (req: Request, res: Response) => {
   }
   //Get exam
   const examFound = await Exam.findById(req.params.examID)
-    .populate("questions")
+    .populate({
+      path: "questions",
+      model: "Question",
+    })
     .populate("academicTerm");
 
   if (!examFound) {
@@ -249,7 +261,7 @@ const writeExam = async (req: Request, res: Response) => {
   }
 
   //check if student is suspende/withdrawn
-  if (studentFound.isWithdrawn || studentFound.isSuspended) {
+  if (studentFound.isExpeled || studentFound.isSuspended) {
     throw new Error("You are suspended/withdrawn, you can't take this exam");
   }
 
@@ -266,117 +278,117 @@ const writeExam = async (req: Request, res: Response) => {
   for (let i = 0; i < questions.length; i++) {
     //find the question
     const question = questions[i];
-    //check if the answer is correct
     if (question.correctAnswer === studentAnswers[i]) {
-      correctanswers++;
-      score++;
-      question.isCorrect = true;
-    } else {
-      //   wrongAnswers++;
+      if (question.correctAnswer === studentAnswers[i]) {
+        correctanswers++;
+        score++;
+        question.isCorrect = true;
+      } else {
+        //   wrongAnswers++;
+      }
     }
-  }
-  //calculate reports
-  totalQuestions = questions.length;
-  grade = (correctanswers / questions.length) * 100;
-  answeredQuestions = questions.map((question) => {
-    return {
-      question: question.question,
-      correctanswer: question.correctAnswer,
-      isCorrect: question.isCorrect,
-    };
-  });
+    //calculate reports
+    grade = (correctanswers / questions.length) * 100;
+    answeredQuestions = questions.map((question) => {
+      return {
+        question: question.question,
+        correctanswer: question.correctAnswer,
+        isCorrect: question.isCorrect,
+      };
+    });
 
-  //calculate status
-  if (grade >= 50) {
-    status = "Pass";
-  } else {
-    status = "Fail";
-  }
+    //calculate status
+    if (grade >= 50) {
+      status = "Pass";
+    } else {
+      status = "Fail";
+    }
 
-  //Remarks
-  if (grade >= 80) {
-    remarks = "Excellent";
-  } else if (grade >= 70) {
-    remarks = "Very Good";
-  } else if (grade >= 60) {
-    remarks = "Good";
-  } else if (grade >= 50) {
-    remarks = "Fair";
-  } else {
-    remarks = "Poor";
-  }
+    //Remarks
+    if (grade >= 80) {
+      remarks = "Excellent";
+    } else if (grade >= 70) {
+      remarks = "Very Good";
+    } else if (grade >= 60) {
+      remarks = "Good";
+    } else if (grade >= 50) {
+      remarks = "Fair";
+    } else {
+      remarks = "Poor";
+    }
 
-  //Generate Exam results
-  const examResults = await ExamResult.create({
-    studentID: studentFound?.studentId,
-    exam: examFound?._id,
-    grade,
-    score,
-    status,
-    remarks,
-    classLevel: examFound?.classLevel,
-    academicTerm: examFound?.academicTerm,
-    academicYear: examFound?.academicYear,
-    answeredQuestions: answeredQuestions,
-  });
-  // //push the results into
-  studentFound.examResults.push(examResults?._id);
-  // //save
-  await studentFound.save();
-
-  //Promoting
-  //promote student to level 200
-  if (
-    examFound.academicTerm.name === "3rd term" &&
-    status === "Pass" &&
-    studentFound?.currentClassLevel === "Level 100"
-  ) {
-    studentFound.classLevels.push("Level 200");
-    studentFound.currentClassLevel = "Level 200";
+    //Generate Exam results
+    const examResults = await ExamResult.create({
+      studentID: studentFound?.studentId,
+      exam: examFound?._id,
+      grade,
+      score,
+      status,
+      remarks,
+      classLevel: examFound?.classLevel,
+      academicTerm: examFound?.academicTerm,
+      academicYear: examFound?.academicYear,
+      answeredQuestions: answeredQuestions,
+    });
+    // //push the results into
+    studentFound.examResults.push(examResults?._id);
+    // //save
     await studentFound.save();
-  }
 
-  //promote student to level 300
-  if (
-    examFound.academicTerm.name === "3rd term" &&
-    status === "Pass" &&
-    studentFound?.currentClassLevel === "Level 200"
-  ) {
-    studentFound.classLevels.push("Level 300");
-    studentFound.currentClassLevel = "Level 300";
-    await studentFound.save();
-  }
+    //Promoting
+    //promote student to level 200
+    if (
+      examFound.academicTerm.name === "3rd term" &&
+      status === "Pass" &&
+      studentFound?.currentClassLevel === "Level 100"
+    ) {
+      studentFound.classLevels.push("Level 200");
+      studentFound.currentClassLevel = "Level 200";
+      await studentFound.save();
+    }
 
-  //promote student to level 400
-  if (
-    examFound.academicTerm.name === "3rd term" &&
-    status === "Pass" &&
-    studentFound?.currentClassLevel === "Level 300"
-  ) {
-    studentFound.classLevels.push("Level 400");
-    studentFound.currentClassLevel = "Level 400";
-    await studentFound.save();
-  }
+    //promote student to level 300
+    if (
+      examFound.academicTerm.name === "3rd term" &&
+      status === "Pass" &&
+      studentFound?.currentClassLevel === "Level 200"
+    ) {
+      studentFound.classLevels.push("Level 300");
+      studentFound.currentClassLevel = "Level 300";
+      await studentFound.save();
+    }
 
-  //promote student to graduate
-  if (
-    examFound.academicTerm.name === "3rd term" &&
-    status === "Pass" &&
-    studentFound?.currentClassLevel === "Level 400"
-  ) {
-    studentFound.isGraduated = true;
-    studentFound.yearGraduated = new Date();
-    await studentFound.save();
-  }
+    //promote student to level 400
+    if (
+      examFound.academicTerm.name === "3rd term" &&
+      status === "Pass" &&
+      studentFound?.currentClassLevel === "Level 300"
+    ) {
+      studentFound.classLevels.push("Level 400");
+      studentFound.currentClassLevel = "Level 400";
+      await studentFound.save();
+    }
 
-  res.status(200).json({
-    status: "success",
-    data: "You have submitted your exam. Check later for the results",
-  });
+    //promote student to graduate
+    if (
+      examFound.academicTerm.name === "3rd term" &&
+      status === "Pass" &&
+      studentFound?.currentClassLevel === "Level 400"
+    ) {
+      studentFound.isGraduated = true;
+      studentFound.yearGraduated = new Date();
+      await studentFound.save();
+    }
+
+    res.status(200).json({
+      status: "success",
+      data: "You have submitted your exam. Check later for the results",
+    });
+  }
 };
 
 export {
-  adminRegisterStudent,
+  registerStudentByAdmin,
   loginStudent,
   getStudentProfile,
   getAllStudentsByAdmin,

@@ -16,7 +16,9 @@ subjectRouter.post("/:programID", verifyToken, isAdmin, createSubject);
 subjectRouter.get("/", verifyToken, isAdmin, getSubjects);
 
 subjectRouter.get("/:id", verifyToken, isAdmin, getSubject);
+
 subjectRouter.put("/:id", verifyToken, isAdmin, updateSubject);
+
 subjectRouter.delete("/:id", verifyToken, isAdmin, deleteSubject);
 
 export default subjectRouter;

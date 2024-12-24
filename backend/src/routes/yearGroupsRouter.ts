@@ -11,15 +11,14 @@ import {
 
 const yearGroupRouter = express.Router();
 
-yearGroupRouter
-  .route("/")
-  .post(verifyToken, isAdmin, createYearGroup)
-  .get(verifyToken, isAdmin, getYearGroups);
+yearGroupRouter.post("/", verifyToken, isAdmin, createYearGroup);
 
-yearGroupRouter
-  .route("/:id")
-  .get(verifyToken, isAdmin, getYearGroup)
-  .put(verifyToken, isAdmin, updateYearGroup)
-  .delete(verifyToken, isAdmin, deleteYearGroup);
+yearGroupRouter.get("/", verifyToken, isAdmin, getYearGroups);
+
+yearGroupRouter.get("/:id", verifyToken, isAdmin, getYearGroup);
+
+yearGroupRouter.put("/:id", verifyToken, isAdmin, updateYearGroup);
+
+yearGroupRouter.delete("/:id", verifyToken, isAdmin, deleteYearGroup);
 
 export default yearGroupRouter;

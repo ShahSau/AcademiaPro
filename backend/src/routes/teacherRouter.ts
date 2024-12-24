@@ -19,6 +19,7 @@ teachersRouter.post(
   isAdmin,
   adminRegisterTeacher
 );
+
 teachersRouter.post("/login", loginTeacher);
 
 // teachersRouter.get(
@@ -35,18 +36,21 @@ teachersRouter.post("/login", loginTeacher);
 // );
 
 teachersRouter.get("/profile", verifyToken, isTeacher, getTeacherProfile);
+
 teachersRouter.get(
   "/:teacherID/admin",
   verifyToken,
   isAdmin,
   getTeacherByAdmin
 );
+
 teachersRouter.put(
   "/:teacherID/update",
   verifyToken,
   isTeacher,
   teacherUpdateProfile
 );
+
 teachersRouter.put(
   "/:teacherID/update/admin",
   verifyToken,
