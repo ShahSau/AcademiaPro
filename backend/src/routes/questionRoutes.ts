@@ -8,7 +8,6 @@ import {
   updateQuestion,
 } from "../controllers/questionsController";
 
-
 const questionsRouter = express.Router();
 
 questionsRouter.get("/", verifyToken, isTeacher, getQuestions);

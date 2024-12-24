@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from "express";
+import type { Request, Response, NextFunction } from "express";
 import Admin from "../models/Admin";
 
 const isAdmin = () => {
@@ -20,8 +20,7 @@ const isAdmin = () => {
 
       next();
     } catch (err) {
-      console.error("Authorization error: ", err);
-      res.status(500).json({ message: "Internal Server Error" });
+      res.status(500).json({ message: `Internal Server Error, ${err}` });
     }
   };
 };

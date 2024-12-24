@@ -1,6 +1,4 @@
 import Admin from "../models/Admin";
-import Program from "../models/Program";
-import Subject from "../models/Subject";
 import YearGroup from "../models/YearGroup";
 import type { Request, Response } from "express";
 

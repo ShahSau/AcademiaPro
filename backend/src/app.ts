@@ -19,7 +19,6 @@ import teacherRouter from "./routes/teacherRouter";
 import yearGroupRouter from "./routes/yearGroups";
 import { globalErrHandler, notFoundErr } from "./middlewares/globalErrHandler";
 
-
 const app = express();
 app.use(express.json());
 

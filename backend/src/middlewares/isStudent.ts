@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from "express";
+import type { Request, Response, NextFunction } from "express";
 import Student from "../models/Student";
 
 const isStudent = () => {
@@ -15,8 +15,7 @@ const isStudent = () => {
 
       next();
     } catch (err) {
-      console.error("Authorization error: ", err);
-      res.status(500).json({ message: "Internal Server Error" });
+      res.status(500).json({ message: `Internal Server Error, ${err}` });
     }
   };
 };

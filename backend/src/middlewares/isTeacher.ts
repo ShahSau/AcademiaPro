@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from "express";
+import type { Request, Response, NextFunction } from "express";
 import Teacher from "../models/Teacher";
 
 const isTeacher = () => {
@@ -15,8 +15,7 @@ const isTeacher = () => {
 
       next();
     } catch (err) {
-      console.error("Authorization error: ", err);
-      res.status(500).json({ message: "Internal Server Error" });
+      res.status(500).json({ message: `Internal Server , ${err}` });
     }
   };
 };

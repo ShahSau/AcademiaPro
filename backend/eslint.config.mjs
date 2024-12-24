@@ -29,13 +29,6 @@ export default [
           argsIgnorePattern: "^_",
         },
       ],
-      "@typescript-eslint/explicit-function-return-type": [
-        "warn",
-        {
-          allowExpressions: true,
-          allowTypedFunctionExpressions: true,
-        },
-      ],
     },
   },
   {
