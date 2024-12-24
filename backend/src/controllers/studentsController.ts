@@ -1,9 +1,12 @@
 // import generateToken from "../../utils/generateToken";
 // import { hashPassword, isPassMatched } from "../../utils/helpers";
 //
+import AcademicTerm from "../models/AcademicTerm";
 import Admin from "../models/Admin";
+import ClassLevel from "../models/ClassLevel";
 import Exam from "../models/Exam";
 import ExamResult from "../models/ExamResults";
+import Question from "../models/Questions";
 import Student from "../models/Student";
 import generateToken from "../utils/generateToken";
 import { hashPassword, isPassMatched } from "../utils/helpers";
@@ -243,8 +246,8 @@ const writeExam = async (req: Request, res: Response) => {
     throw new Error("Exam not found");
   }
   //get questions
-  const questions = examFound?.questions;
-  //get students questions
+  const questions = await Question.find({ exam: examFound?._id });
+  //get students answers
   const studentAnswers = req.body.answers;
 
   //check if student answered all questions
@@ -336,9 +339,10 @@ const writeExam = async (req: Request, res: Response) => {
     await studentFound.save();
 
     //Promoting
+    const academicTerm = await AcademicTerm.findById(examFound.academicTerm);
     //promote student to level 200
     if (
-      examFound.academicTerm.name === "3rd term" &&
+      academicTerm?.name === "1st term" &&
       status === "Pass" &&
       studentFound?.currentClassLevel === "Level 100"
     ) {
@@ -349,7 +353,7 @@ const writeExam = async (req: Request, res: Response) => {
 
     //promote student to level 300
     if (
-      examFound.academicTerm.name === "3rd term" &&
+      academicTerm?.name === "2nd term" &&
       status === "Pass" &&
       studentFound?.currentClassLevel === "Level 200"
     ) {
@@ -360,7 +364,7 @@ const writeExam = async (req: Request, res: Response) => {
 
     //promote student to level 400
     if (
-      examFound.academicTerm.name === "3rd term" &&
+      academicTerm?.name === "3rd term" &&
       status === "Pass" &&
       studentFound?.currentClassLevel === "Level 300"
     ) {
@@ -371,12 +375,12 @@ const writeExam = async (req: Request, res: Response) => {
 
     //promote student to graduate
     if (
-      examFound.academicTerm.name === "3rd term" &&
+      academicTerm?.name === "4th term" &&
       status === "Pass" &&
       studentFound?.currentClassLevel === "Level 400"
     ) {
       studentFound.isGraduated = true;
-      studentFound.yearGraduated = new Date();
+      studentFound.yearGraduated = new Date().toDateString();
       await studentFound.save();
     }
 

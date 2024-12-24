@@ -19,4 +19,5 @@ examResultRouter.put(
   isAdmin,
   adminToggleExamResult
 );
+
 export default examResultRouter;

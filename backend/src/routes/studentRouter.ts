@@ -4,7 +4,7 @@ import verifyToken from "../middlewares/verifyToken";
 import isStudent from "../middlewares/isStudent";
 
 import {
-  adminRegisterStudent,
+  registerStudentByAdmin,
   loginStudent,
   getStudentProfile,
   getAllStudentsByAdmin,
@@ -20,7 +20,7 @@ studentRouter.post(
   "/admin/register",
   verifyToken,
   isAdmin,
-  adminRegisterStudent
+  registerStudentByAdmin
 );
 
 studentRouter.post("/login", loginStudent);

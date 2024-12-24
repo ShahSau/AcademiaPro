@@ -104,8 +104,8 @@ const teacherUpdateProfile = async (req: Request, res: Response) => {
 
   if (password) {
     //update
-    const teacher = await Teacher.findByIdAndUpdate(
-      req.userAuth._id,
+    const teacher = await Teacher.findOneAndUpdate(
+      email,
       {
         email,
         password: await hashPassword(password),
@@ -123,8 +123,8 @@ const teacherUpdateProfile = async (req: Request, res: Response) => {
     });
   } else {
     //update
-    const teacher = await Teacher.findByIdAndUpdate(
-      req.userAuth._id,
+    const teacher = await Teacher.findOneAndUpdate(
+      email,
       {
         email,
         name,

@@ -8,7 +8,7 @@ interface StudentDocument extends Document {
   password: string;
   studentId: string;
   role: string;
-  classLevels: mongoose.Types.ObjectId[];
+  classLevels: string[];
   currentClassLevel?: string;
   academicYear: mongoose.Types.ObjectId;
   dateAdmitted: Date;
@@ -50,7 +50,7 @@ const studentSchema = new mongoose.Schema<StudentDocument>(
     },
     classLevels: [
       {
-        type: mongoose.Schema.Types.ObjectId,
+        type: String,
         ref: "ClassLevel",
       },
     ],
