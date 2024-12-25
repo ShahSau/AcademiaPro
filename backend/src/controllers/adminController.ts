@@ -5,6 +5,7 @@ import generateToken from "../utils/generateToken";
 import Teacher from "../models/Teacher";
 import Exam from "../models/Exam";
 import Student from "../models/Student";
+import generateUniqueId from "../utils/generateUniqueID";
 
 // Admin Registration
 const registerAdminController = async (req: Request, res: Response) => {
@@ -25,6 +26,7 @@ const registerAdminController = async (req: Request, res: Response) => {
       .json({ message: "Admin already exists", success: false });
   }
 
+  const id = await generateUniqueId(name, email, mobile);
   // Create a new admin
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -33,6 +35,7 @@ const registerAdminController = async (req: Request, res: Response) => {
       email,
       mobile,
       password: hashedPassword,
+      id
     });
 
     await admin.save();
@@ -90,6 +93,7 @@ const loginAdminController = async (req: Request, res: Response) => {
         email: admin.email,
         mobile: admin.mobile,
         token: admin.token,
+        id: admin.id
       },
     });
   } catch (error) {
@@ -101,17 +105,13 @@ const loginAdminController = async (req: Request, res: Response) => {
 
 // Admin delete
 const deleteAdminController = async (req: Request, res: Response) => {
-  const { email } = req.body;
+  const id = req.params.id;
+  const token = req.headers.token;
 
-  if (!email) {
-    return res
-      .status(400)
-      .json({ message: "Email is required", success: false });
-  }
 
   try {
     // Check if admin exists in the database
-    const adminExists = await Admin.findOne({ email });
+    const adminExists = await Admin.findOne({ id });
 
     if (!adminExists) {
       return res
@@ -119,8 +119,15 @@ const deleteAdminController = async (req: Request, res: Response) => {
         .json({ message: "Eamil dosenot exists", success: false });
     }
 
+
+    if (adminExists.token !== token) {
+      return res
+        .status(403)
+        .json({ message: "Unauthorized", success: false });
+    }
+
     await Admin.deleteOne({
-      email: email,
+      id,
     });
 
     res.status(200).json({ message: "Admin deleted", success: true });
@@ -134,6 +141,7 @@ const deleteAdminController = async (req: Request, res: Response) => {
 // Admin update
 const updateAdminController = async (req: Request, res: Response) => {
   const { name, email, mobile, password } = req.body;
+  const token = req.headers.token;
 
   if (!name || !email || !mobile || !password) {
     return res
@@ -143,7 +151,7 @@ const updateAdminController = async (req: Request, res: Response) => {
 
   try {
     // Check if admin exists in the database
-    const adminExists = await Admin.findOne({ email });
+    const adminExists = await Admin.findOne({ token });
 
     if (!adminExists) {
       return res
@@ -154,7 +162,7 @@ const updateAdminController = async (req: Request, res: Response) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     await Admin.updateOne(
-      { email: email },
+      { token },
       {
         name: name,
         email: email,

@@ -1,9 +1,5 @@
-// import generateToken from "../../utils/generateToken";
-// import { hashPassword, isPassMatched } from "../../utils/helpers";
-//
 import AcademicTerm from "../models/AcademicTerm";
 import Admin from "../models/Admin";
-import ClassLevel from "../models/ClassLevel";
 import Exam from "../models/Exam";
 import ExamResult from "../models/ExamResults";
 import Question from "../models/Questions";

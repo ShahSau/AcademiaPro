@@ -60,24 +60,7 @@ app.use("/api/v1/exam-results", examResultRouter);
 //Error middlewares
 app.use(notFoundErr);
 app.use(globalErrHandler);
-/**
- * @swagger
- * /api/health:
- *   get:
- *     summary: Health check endpoint
- *     responses:
- *       200:
- *         description: Returns a message indicating the server is live
- *         content:
- *           text/plain:
- *             schema:
- *               type: string
- *               example: I am live
- */
-//health check
-app.get("/api/health", (_req: Request, res: Response) => {
-  res.send("I am live");
-});
+
 
 // Connect to MongoDB
 connectToDB();

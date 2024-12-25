@@ -10,13 +10,18 @@ const academicTermSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    id:{
+      type: String,
+      required: true,
+      unique: true,
+    },
     duration: {
       type: String,
       required: true,
       default: "3 months",
     },
     createdBy: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: String,
       ref: "Admin",
       required: true,
     },

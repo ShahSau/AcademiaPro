@@ -5,7 +5,7 @@ import type { NextFunction, Request, Response } from "express";
 dotenv.config();
 
 const verifyToken = (req: Request, res: Response, next: NextFunction) => {
-  const token = req.headers.token as string | undefined;
+  const token = req.headers.token as string;
   const secret = process.env.JWT_SECRET;
   if (!secret) {
     throw new Error("JWT_SECRET is not defined");
