@@ -11,7 +11,7 @@ const ClassLevelSchema = new mongoose.Schema(
       type: String,
     },
     createdBy: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: String,
       ref: "Admin",
       required: true,
     },
@@ -25,7 +25,7 @@ const ClassLevelSchema = new mongoose.Schema(
     //optional.
     subjects: [
       {
-        type: mongoose.Schema.Types.ObjectId,
+        type: String,
         ref: "Subject",
       },
     ],
@@ -35,6 +35,11 @@ const ClassLevelSchema = new mongoose.Schema(
         ref: "Teacher",
       },
     ],
+    id:{
+      type: String,
+      required: true,
+      unique: true
+    }
   },
   { timestamps: true }
 );

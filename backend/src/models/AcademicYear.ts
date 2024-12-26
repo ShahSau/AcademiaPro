@@ -19,22 +19,27 @@ const academicYearSchema = new mongoose.Schema(
       default: false,
     },
     createdBy: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: String,
       ref: "Admin",
       required: true,
     },
     students: [
       {
-        type: mongoose.Schema.Types.ObjectId,
+        type: String,
         ref: "Student",
       },
     ],
     teachers: [
       {
-        type: mongoose.Schema.Types.ObjectId,
+        type: String,
         ref: "Teacher",
       },
     ],
+    id:{
+      type: String,
+      required: true,
+      unique: true
+    }
   },
   {
     timestamps: true,

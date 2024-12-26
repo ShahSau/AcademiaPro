@@ -1,10 +1,11 @@
 import AcademicYear from "../models/AcademicYear";
 import Admin from "../models/Admin";
 import type { Request, Response } from "express";
+import {v4 as uuidv4} from "uuid";
 
 // create Academic Year
 const createAcademicYear = async (req: Request, res: Response) => {
-  const { name, fromYear, toYear, adminEmail } = req.body;
+  const { name, fromYear, toYear } = req.body;
   //check name exists
   const createAcademicYearFound = await AcademicYear.findOne({
     name,
@@ -14,7 +15,7 @@ const createAcademicYear = async (req: Request, res: Response) => {
   }
 
   //check admin exists
-  const admin = await Admin.findOne({ email: adminEmail });
+  const admin = await Admin.findOne({ token:req.headers.token });
 
   if (!admin) {
     throw new Error("Admin not found");
@@ -24,7 +25,8 @@ const createAcademicYear = async (req: Request, res: Response) => {
     name,
     fromYear,
     toYear,
-    createdBy: admin._id,
+    createdBy: admin.id,
+    id: uuidv4().replace(/-/g, "").slice(0, 18),
   });
 
   await academicYear.save();
@@ -38,7 +40,7 @@ const createAcademicYear = async (req: Request, res: Response) => {
 
 // get all Academic Years
 const getAcademicYears = async (req: Request, res: Response) => {
-  const academicYears = await AcademicYear.find();
+  const academicYears = await AcademicYear.find({});
 
   res.status(201).json({
     status: "success",
@@ -49,7 +51,7 @@ const getAcademicYears = async (req: Request, res: Response) => {
 
 // get single Academic Year
 const getAcademicYear = async (req: Request, res: Response) => {
-  const academicYears = await AcademicYear.findById(req.params.id);
+  const academicYears = await AcademicYear.findOne({id:req.params.id});
 
   res.status(201).json({
     status: "success",
@@ -60,26 +62,26 @@ const getAcademicYear = async (req: Request, res: Response) => {
 
 // update Academic Year
 const updateAcademicYear = async (req: Request, res: Response) => {
-  const { name, fromYear, toYear, adminEmail } = req.body;
+  const { name, fromYear, toYear } = req.body;
   //check name exists
-  const createAcademicYearFound = await AcademicYear.findOne({ name });
-  if (createAcademicYearFound) {
-    throw new Error("Academic year already exists");
+  const createAcademicYearFound = await AcademicYear.findOne({id:req.params.id});
+  if (!createAcademicYearFound) {
+    throw new Error("Academic year dosenot exists");
   }
 
   //check admin exists
-  const admin = await Admin.findOne({ email: adminEmail });
+  const admin = await Admin.findOne({ token: req.headers.token });
 
   if (!admin) {
     throw new Error("Admin not found");
   }
-  const academicYear = await AcademicYear.findByIdAndUpdate(
-    req.params.id,
+  const academicYear = await AcademicYear.findOneAndUpdate(
+    { id: req.params.id },
     {
       name,
       fromYear,
       toYear,
-      createdBy: admin._id,
+      createdBy: admin.id,
     },
     {
       new: true,
@@ -95,7 +97,7 @@ const updateAcademicYear = async (req: Request, res: Response) => {
 
 // delete Academic Year
 const deleteAcademicYear = async (req: Request, res: Response) => {
-  await AcademicYear.findByIdAndDelete(req.params.id);
+  await AcademicYear.findOneAndDelete({id:req.params.id});
 
   res.status(200).json({
     status: "success",

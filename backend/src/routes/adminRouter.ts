@@ -35,6 +35,8 @@ const adminRouter = express.Router();
  *     summary: Register a new admin
  *     tags:
  *       - Admin
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: header
  *         name: token
@@ -86,6 +88,8 @@ adminRouter.post("/register", verifyToken, isAdmin, registerAdminController);
  *     description: Authenticates an admin user with a token and login credentials.
  *     tags:
  *       - Admin
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -130,6 +134,8 @@ adminRouter.post("/login", loginAdminController);
  *     summary: Delete an admin
  *     tags:
  *       - Admin
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: header
  *         name: token
@@ -163,6 +169,8 @@ adminRouter.delete("/:id", verifyToken, isAdmin, deleteAdminController);
  *     summary: Update an admin
  *     tags:
  *       - Admin
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: header
  *         name: token

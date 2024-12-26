@@ -1,17 +1,18 @@
 import Admin from "../models/Admin";
 import type { Request, Response } from "express";
 import ClassLevel from "../models/ClassLevel";
+import {v4 as uuidv4} from "uuid";
 
 // create class level
 const createClassLevel = async (req: Request, res: Response) => {
-  const { name, description, adminEmail } = req.body;
+  const { name, description } = req.body;
   //check name exists
   const createClassLevelFound = await ClassLevel.findOne({ name });
   if (createClassLevelFound) {
     throw new Error("Class level already exists");
   }
 
-  const admin = await Admin.findOne({ email: adminEmail });
+  const admin = await Admin.findOne({ token: req.headers.token });
 
   if (!admin) {
     throw new Error("Admin not found");
@@ -19,7 +20,8 @@ const createClassLevel = async (req: Request, res: Response) => {
   const classLevel = new ClassLevel({
     name,
     description,
-    createdBy: admin._id,
+    createdBy: admin.id,
+    id: uuidv4().replace(/-/g, "").slice(0, 18),
   });
   await classLevel.save();
 
@@ -32,7 +34,7 @@ const createClassLevel = async (req: Request, res: Response) => {
 
 // get all class levels
 const getClassLevels = async (req: Request, res: Response) => {
-  const classLevels = await ClassLevel.find();
+  const classLevels = await ClassLevel.find({});
 
   res.status(201).json({
     status: "success",
@@ -43,7 +45,7 @@ const getClassLevels = async (req: Request, res: Response) => {
 
 // get class level by id
 const getClassLevel = async (req: Request, res: Response) => {
-  const classLevel = await ClassLevel.findById(req.params.id);
+  const classLevel = await ClassLevel.findOne({id:req.params.id});
 
   res.status(201).json({
     status: "success",
@@ -54,17 +56,17 @@ const getClassLevel = async (req: Request, res: Response) => {
 
 // update class level
 const updateClassLevel = async (req: Request, res: Response) => {
-  const { name, description, adminEmail } = req.body;
-  const admin = await Admin.findOne({ email: adminEmail });
+  const { name, description } = req.body;
+  const admin = await Admin.findOne({ token: req.headers.token });
   if (!admin) {
     throw new Error("Admin not found");
   }
-  const classLevel = await ClassLevel.findByIdAndUpdate(
-    req.params.id,
+  const classLevel = await ClassLevel.findOneAndUpdate(
+    {id:req.params.id},
     {
       name,
       description,
-      createdBy: admin._id,
+      createdBy: admin.id,
     },
     { new: true }
   );
@@ -82,7 +84,7 @@ const updateClassLevel = async (req: Request, res: Response) => {
 
 // delete class level
 const deleteClassLevel = async (req: Request, res: Response) => {
-  const classLevel = await ClassLevel.findByIdAndDelete(req.params.id);
+  const classLevel = await ClassLevel.findOneAndDelete({id:req.params.id});
 
   if (!classLevel) {
     throw new Error("Class level not found");
@@ -91,7 +93,6 @@ const deleteClassLevel = async (req: Request, res: Response) => {
   res.status(201).json({
     status: "success",
     message: "Class level deleted successfully",
-    data: classLevel,
   });
 };
 
