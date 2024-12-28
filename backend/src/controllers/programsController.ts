@@ -102,41 +102,4 @@ const deleteProgram = async (req: Request, res: Response) => {
   });
 };
 
-// const addSubjectToProgram = async (req: Request, res: Response) => {
-//   const { name } = req.body;
-//   //get the program
-//   const program = await Program.findOne({id:req.params.id});
-//   if (!program) {
-//     throw new Error("Program not found");
-//   }
-//   //Find the subject
-//   const subjectFound = await Subject.findOne({ name });
-//   if (!subjectFound) {
-//     throw new Error("Subject not found");
-//   }
-//   //Check if subject exists
-//   const subjectExists = program.subjects?.find(
-//     (sub) => sub?.toString() === subjectFound?.id.toString()
-//   );
-//   if (subjectExists) {
-//     throw new Error("Subject already exists");
-//   }
-//   //push the subj into program
-//   program.subjects.push(subjectFound?.id);
-//   //save
-//   await program.save();
-//   res.status(201).json({
-//     status: "success",
-//     message: "Subject added successfully",
-//     data: program,
-//   });
-// };
-
-export {
-  createProgram,
-  getPrograms,
-  getProgram,
-  updatProgram,
-  deleteProgram,
-  // addSubjectToProgram,
-};
+export { createProgram, getPrograms, getProgram, updatProgram, deleteProgram };

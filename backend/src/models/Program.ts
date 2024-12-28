@@ -39,7 +39,7 @@ const ProgramSchema = new mongoose.Schema(
     ],
     subjects: [
       {
-        type: String,
+        type: Object,
         ref: "Subject",
         default: [],
       },

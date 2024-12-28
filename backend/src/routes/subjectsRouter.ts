@@ -6,7 +6,6 @@ import {
   getSubject,
   getSubjects,
   updateSubject,
-  deleteSubject,
 } from "../controllers/subjectsController";
 
 const subjectRouter = express.Router();
@@ -19,6 +18,22 @@ const subjectRouter = express.Router();
  *       - Subjects
  *     summary: Create a new subject
  *     description: Only admins can create subjects
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: programID
+ *         in: path
+ *         required: true
+ *         description: ID of the program
+ *         schema:
+ *           type: string
+ *       - in: header
+ *         name: token
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: JWT
+ *           description: Token for authorization.
  *     requestBody:
  *       required: true
  *       content:
@@ -28,16 +43,20 @@ const subjectRouter = express.Router();
  *             properties:
  *               name:
  *                 type: string
+ *                 description: The name of the Subject
+ *                 example: Mathematics
  *               description:
  *                 type: string
- *               teacher:
- *                 type: string
+ *                 description: The description of the subject
+ *                 example: The study of numbers and shapes
  *               academicTerm:
  *                 type: string
- *               createdBy:
- *                 type: string
+ *                 description: The academic term of the subject
+ *                 example: Fall 2024
  *               duration:
  *                 type: string
+ *                 description: The duration of the subject
+ *                 example: 3 months
  *     responses:
  *       201:
  *         description: Subject created successfully
@@ -62,6 +81,16 @@ subjectRouter.post("/:programID", verifyToken, isAdmin, createSubject);
  *       - Subjects
  *     summary: Get all subjects
  *     description: Only admins can get all subjects
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: header
+ *         name: token
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: JWT
+ *         description: Token for authorization.
  *     responses:
  *       200:
  *         description: Subjects fetched successfully
@@ -80,6 +109,22 @@ subjectRouter.get("/", verifyToken, isAdmin, getSubjects);
  *       - Subjects
  *     summary: Get a subject
  *     description: Only admins can get a subject
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: ID of the subject
+ *         schema:
+ *           type: string
+ *       - in: header
+ *         name: token
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: JWT
+ *         description: Token for authorization.
  *     responses:
  *       200:
  *         description: Subject fetched successfully
@@ -98,6 +143,45 @@ subjectRouter.get("/:id", verifyToken, isAdmin, getSubject);
  *       - Subjects
  *     summary: Update a subject
  *     description: Only admins can update a subject
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: ID of the program
+ *         schema:
+ *           type: string
+ *       - in: header
+ *         name: token
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: JWT
+ *         description: Token for authorization.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 description: The name of the Subject
+ *                 example: Mathematics
+ *               description:
+ *                 type: string
+ *                 description: The description of the subject
+ *                 example: The study of numbers and shapes
+ *               academicTerm:
+ *                 type: string
+ *                 description: The academic term of the subject
+ *                 example: Fall 2024
+ *               duration:
+ *                 type: string
+ *                 description: The duration of the subject
+ *                 example: 3 months
  *     responses:
  *       200:
  *         description: Subject updated successfully
@@ -107,23 +191,5 @@ subjectRouter.get("/:id", verifyToken, isAdmin, getSubject);
  *         description: Server error
  */
 subjectRouter.put("/:id", verifyToken, isAdmin, updateSubject);
-
-/**
- * @swagger
- * /api/v1/subjects/{id}:
- *   delete:
- *     tags:
- *       - Subjects
- *     summary: Delete a subject
- *     description: Only admins can delete a subject
- *     responses:
- *       200:
- *         description: Subject deleted successfully
- *       400:
- *         description: Error deleting subject
- *       500:
- *         description: Server error
- */
-subjectRouter.delete("/:id", verifyToken, isAdmin, deleteSubject);
 
 export default subjectRouter;

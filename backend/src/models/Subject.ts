@@ -29,6 +29,11 @@ const subjectSchema = new mongoose.Schema(
       required: true,
       default: "3 months",
     },
+    programId: {
+      type: String,
+      ref: "Program",
+      required: true,
+    },
     id: {
       type: String,
       required: true,

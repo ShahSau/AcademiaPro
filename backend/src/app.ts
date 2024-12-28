@@ -1,7 +1,5 @@
 import express from "express";
-import type { Request, Response } from "express";
 import cors from "cors";
-// import authRoutes from "./routes/authRoutes";
 import swaggerUI from "swagger-ui-express";
 import specs from "./swagger";
 import connectToDB from "./config/dbConnect";

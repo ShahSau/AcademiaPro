@@ -89,8 +89,6 @@ programRouter.post("/", verifyToken, isAdmin, createProgram);
  */
 programRouter.get("/", verifyToken, isAdmin, getPrograms);
 
-// programRouter.put("/:id/subjects", verifyToken, isAdmin, addSubjectToProgram);
-
 /**
  * @swagger
  * /api/v1/programs/{id}:
