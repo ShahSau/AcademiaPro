@@ -1,7 +1,7 @@
 import Admin from "../models/Admin";
 import type { Request, Response } from "express";
 import ClassLevel from "../models/ClassLevel";
-import {v4 as uuidv4} from "uuid";
+import { v4 as uuidv4 } from "uuid";
 
 // create class level
 const createClassLevel = async (req: Request, res: Response) => {
@@ -45,7 +45,7 @@ const getClassLevels = async (req: Request, res: Response) => {
 
 // get class level by id
 const getClassLevel = async (req: Request, res: Response) => {
-  const classLevel = await ClassLevel.findOne({id:req.params.id});
+  const classLevel = await ClassLevel.findOne({ id: req.params.id });
 
   res.status(201).json({
     status: "success",
@@ -62,7 +62,7 @@ const updateClassLevel = async (req: Request, res: Response) => {
     throw new Error("Admin not found");
   }
   const classLevel = await ClassLevel.findOneAndUpdate(
-    {id:req.params.id},
+    { id: req.params.id },
     {
       name,
       description,
@@ -84,7 +84,7 @@ const updateClassLevel = async (req: Request, res: Response) => {
 
 // delete class level
 const deleteClassLevel = async (req: Request, res: Response) => {
-  const classLevel = await ClassLevel.findOneAndDelete({id:req.params.id});
+  const classLevel = await ClassLevel.findOneAndDelete({ id: req.params.id });
 
   if (!classLevel) {
     throw new Error("Class level not found");

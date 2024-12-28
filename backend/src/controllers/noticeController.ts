@@ -40,7 +40,7 @@ const getNotices = async (req: Request, res: Response) => {
 
 // get notice by id
 const getNotice = async (req: Request, res: Response) => {
-  const notice = await Notice.findOne({id:req.params.id});
+  const notice = await Notice.findOne({ id: req.params.id });
 
   res.status(201).json({
     status: "success",
@@ -59,7 +59,7 @@ const updateNotice = async (req: Request, res: Response) => {
   }
 
   const notice = await Notice.findOneAndUpdate(
-    {id:req.params.id},
+    { id: req.params.id },
     {
       title,
       details,
@@ -78,7 +78,7 @@ const updateNotice = async (req: Request, res: Response) => {
 
 // delete notice
 const deleteNotice = async (req: Request, res: Response) => {
-  await Notice.findOneAndDelete({id:req.params.id});
+  await Notice.findOneAndDelete({ id: req.params.id });
 
   res.status(201).json({
     status: "success",

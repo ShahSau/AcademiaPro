@@ -89,11 +89,11 @@ const examSchema = new mongoose.Schema(
       required: true,
       default: false,
     },
-    id:{
+    id: {
       type: String,
       required: true,
-      unique: true
-    }
+      unique: true,
+    },
   },
   { timestamps: true }
 );

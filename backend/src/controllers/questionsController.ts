@@ -14,7 +14,7 @@ const createQuestion = async (req: Request, res: Response) => {
     teacherEmail,
   } = req.body;
   //find the exam
-  const examFound = await Exam.findOne({id:req.params.id});
+  const examFound = await Exam.findOne({ id: req.params.id });
   if (!examFound) {
     throw new Error("Exam not found");
   }

@@ -19,11 +19,11 @@ const noticeSchema = new mongoose.Schema(
       ref: "Admin",
       required: true,
     },
-    id:{
+    id: {
       type: String,
       required: true,
       unique: true,
-    }
+    },
   },
   { timestamps: true }
 );

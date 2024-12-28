@@ -27,7 +27,6 @@ const adminRouter = express.Router();
  *   description: Admin management
  */
 
-
 /**
  * @swagger
  * /api/v1/admins/register:
@@ -78,7 +77,6 @@ const adminRouter = express.Router();
  */
 
 adminRouter.post("/register", verifyToken, isAdmin, registerAdminController);
-
 
 /**
  * @swagger
@@ -161,7 +159,6 @@ adminRouter.post("/login", loginAdminController);
 
 adminRouter.delete("/:id", verifyToken, isAdmin, deleteAdminController);
 
-
 /**
  * @swagger
  * /api/v1/admins/update:
@@ -211,7 +208,7 @@ adminRouter.delete("/:id", verifyToken, isAdmin, deleteAdminController);
  *         description: Error updating admin.
  */
 
-adminRouter.put("/update", verifyToken,isAdmin, updateAdminController); 
+adminRouter.put("/update", verifyToken, isAdmin, updateAdminController);
 
 // suspend teacher
 adminRouter.put(

@@ -12,7 +12,6 @@ import express from "express";
 
 const academicYearRouter = express.Router();
 
-
 /**
  * @swagger
  * /api/v1/academic-years:

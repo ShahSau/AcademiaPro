@@ -29,11 +29,11 @@ const subjectSchema = new mongoose.Schema(
       required: true,
       default: "3 months",
     },
-    id:{
+    id: {
       type: String,
       required: true,
       unique: true,
-    }
+    },
   },
   { timestamps: true }
 );

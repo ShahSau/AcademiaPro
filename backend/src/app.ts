@@ -61,7 +61,6 @@ app.use("/api/v1/exam-results", examResultRouter);
 app.use(notFoundErr);
 app.use(globalErrHandler);
 
-
 // Connect to MongoDB
 connectToDB();
 

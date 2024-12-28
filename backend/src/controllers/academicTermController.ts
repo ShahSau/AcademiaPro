@@ -47,7 +47,6 @@ const getAcademicTerms = async (req: Request, res: Response) => {
 
 // get academic term by id
 const getAcademicTerm = async (req: Request, res: Response) => {
- 
   const academicTerm = await AcademicTerm.findOne({ id: req.params.id });
 
   res.status(201).json({
@@ -66,7 +65,7 @@ const updateAcademicTerms = async (req: Request, res: Response) => {
     throw new Error("Admin not found");
   }
 
-  const academicTerm = await AcademicTerm.findOne({id:req.params.id});
+  const academicTerm = await AcademicTerm.findOne({ id: req.params.id });
 
   if (!academicTerm) {
     throw new Error("Academic term not found");
@@ -88,7 +87,7 @@ const updateAcademicTerms = async (req: Request, res: Response) => {
 
 // delete academic term
 const deleteAcademicTerm = async (req: Request, res: Response) => {
-  const academicTerm = await AcademicTerm.findOne({id:req.params.id});
+  const academicTerm = await AcademicTerm.findOne({ id: req.params.id });
 
   if (!academicTerm) {
     throw new Error("Academic term not found");

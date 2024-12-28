@@ -51,23 +51,23 @@ const loginStudent = async (req: Request, res: Response) => {
   const isMatched = await isPassMatched(password, student?.password);
   if (!isMatched) {
     return res.json({ message: "Invalid login crendentials" });
-  } 
+  }
   //generate token
   const token = generateToken(student.id);
 
   student.token = token;
 
   await student.save();
-  
-    res.status(200).json({
-      message: "Admin logged in successfully",
-      success: true,
-      data: {
-        name: student.name,
-        email: student.email,
-        token: student.token,
-      },
-    });
+
+  res.status(200).json({
+    message: "Admin logged in successfully",
+    success: true,
+    data: {
+      name: student.name,
+      email: student.email,
+      token: student.token,
+    },
+  });
 };
 
 const getStudentProfile = async (req: Request, res: Response) => {

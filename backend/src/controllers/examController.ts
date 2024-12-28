@@ -1,7 +1,7 @@
 import Exam from "../models/Exam";
 import Teacher from "../models/Teacher";
 import type { Request, Response } from "express";
-import {v4 as uuidv4} from "uuid";
+import { v4 as uuidv4 } from "uuid";
 
 // Create Exam
 const createExam = async (req: Request, res: Response) => {
@@ -80,7 +80,7 @@ const getExams = async (req: Request, res: Response) => {
 
 // Get Exam
 const getExam = async (req: Request, res: Response) => {
-  const exam = await Exam.findOne({id:req.params.id})
+  const exam = await Exam.findOne({ id: req.params.id })
     .populate("subject")
     .populate("program")
     .populate("academicTerm")
@@ -121,7 +121,7 @@ const updatExam = async (req: Request, res: Response) => {
   }
 
   const examUpdated = await Exam.findOneAndUpdate(
-    {id:req.params.id},
+    { id: req.params.id },
     {
       name,
       description,

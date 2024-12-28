@@ -44,7 +44,7 @@ const programRouter = express.Router();
  *               description:
  *                 type: string
  *                 description: The description of the program
- *                 example: The study of computers and computational systems 
+ *                 example: The study of computers and computational systems
  *               duration:
  *                 type: string
  *                 description: The duration of the program
@@ -88,7 +88,6 @@ programRouter.post("/", verifyToken, isAdmin, createProgram);
  *        description: Server error
  */
 programRouter.get("/", verifyToken, isAdmin, getPrograms);
-
 
 // programRouter.put("/:id/subjects", verifyToken, isAdmin, addSubjectToProgram);
 
@@ -168,7 +167,7 @@ programRouter.get("/:id", verifyToken, isAdmin, getProgram);
  *               description:
  *                 type: string
  *                 description: The description of the program
- *                 example: The study of computers and computational systems 
+ *                 example: The study of computers and computational systems
  *               duration:
  *                 type: string
  *                 description: The duration of the program

@@ -110,9 +110,9 @@ const studentSchema = new mongoose.Schema<StudentDocument>(
       type: String,
       required: true,
     },
-    token:{
-      type: String
-    }
+    token: {
+      type: String,
+    },
   },
   {
     timestamps: true,

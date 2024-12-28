@@ -35,11 +35,11 @@ const ClassLevelSchema = new mongoose.Schema(
         ref: "Teacher",
       },
     ],
-    id:{
+    id: {
       type: String,
       required: true,
-      unique: true
-    }
+      unique: true,
+    },
   },
   { timestamps: true }
 );

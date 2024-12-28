@@ -46,12 +46,12 @@ const getAllExamResults = async (req: Request, res: Response) => {
 
 const adminToggleExamResult = async (req: Request, res: Response) => {
   //find the exam Results
-  const examResult = await ExamResult.findOne({id:req.params.id});
+  const examResult = await ExamResult.findOne({ id: req.params.id });
   if (!examResult) {
     throw new Error("Exam result not foound");
   }
   const publishResult = await ExamResult.findOneAndUpdate(
-    {id:req.params.id},
+    { id: req.params.id },
     {
       isPublished: req.body.publish,
     },

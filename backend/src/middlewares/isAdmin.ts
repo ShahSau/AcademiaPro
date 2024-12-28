@@ -22,6 +22,6 @@ const isAdmin = async (req: Request, res: Response, next: NextFunction) => {
   } catch (err) {
     res.status(500).json({ message: `Internal Server Error, ${err}` });
   }
-}
+};
 
 export default isAdmin;

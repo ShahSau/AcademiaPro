@@ -68,11 +68,11 @@ const adminSchema = new mongoose.Schema(
         ref: "Student",
       },
     ],
-    id:{
+    id: {
       type: String,
       required: true,
       unique: true,
-    }
+    },
   },
   {
     timestamps: true,

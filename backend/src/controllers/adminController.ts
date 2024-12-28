@@ -35,7 +35,7 @@ const registerAdminController = async (req: Request, res: Response) => {
       email,
       mobile,
       password: hashedPassword,
-      id
+      id,
     });
 
     await admin.save();
@@ -93,7 +93,7 @@ const loginAdminController = async (req: Request, res: Response) => {
         email: admin.email,
         mobile: admin.mobile,
         token: admin.token,
-        id: admin.id
+        id: admin.id,
       },
     });
   } catch (error) {
@@ -108,7 +108,6 @@ const deleteAdminController = async (req: Request, res: Response) => {
   const id = req.params.id;
   const token = req.headers.token;
 
-
   try {
     // Check if admin exists in the database
     const adminExists = await Admin.findOne({ id });
@@ -119,11 +118,8 @@ const deleteAdminController = async (req: Request, res: Response) => {
         .json({ message: "Eamil dosenot exists", success: false });
     }
 
-
     if (adminExists.token !== token) {
-      return res
-        .status(403)
-        .json({ message: "Unauthorized", success: false });
+      return res.status(403).json({ message: "Unauthorized", success: false });
     }
 
     await Admin.deleteOne({
