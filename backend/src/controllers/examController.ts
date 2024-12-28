@@ -1,6 +1,8 @@
 import Exam from "../models/Exam";
 import Teacher from "../models/Teacher";
 import type { Request, Response } from "express";
+import {v4 as uuidv4} from "uuid";
+
 // Create Exam
 const createExam = async (req: Request, res: Response) => {
   const {
@@ -17,7 +19,6 @@ const createExam = async (req: Request, res: Response) => {
     passMark,
     totalMark,
     classLevel,
-    teacherEmail,
     examStatus,
     resultPublished,
     questions,
@@ -29,7 +30,7 @@ const createExam = async (req: Request, res: Response) => {
   }
 
   //check if teacher exists
-  const teacher = await Teacher.findOne({ email: teacherEmail });
+  const teacher = await Teacher.findOne({ token: req.headers.token });
   if (!teacher) {
     throw new Error("Teacher not found");
   }
@@ -51,7 +52,8 @@ const createExam = async (req: Request, res: Response) => {
     academicYear,
     classLevel,
     resultPublished,
-    createdBy: teacher._id,
+    createdBy: teacher.id,
+    id: uuidv4().replace(/-/g, "").slice(0, 18),
   });
 
   const createdExam = await exam.save();
@@ -64,7 +66,7 @@ const createExam = async (req: Request, res: Response) => {
 
 // Get Exams
 const getExams = async (req: Request, res: Response) => {
-  const exams = await Exam.find()
+  const exams = await Exam.find({})
     .populate("subject")
     .populate("program")
     .populate("academicTerm")
@@ -78,7 +80,7 @@ const getExams = async (req: Request, res: Response) => {
 
 // Get Exam
 const getExam = async (req: Request, res: Response) => {
-  const exam = await Exam.findById(req.params.id)
+  const exam = await Exam.findOne({id:req.params.id})
     .populate("subject")
     .populate("program")
     .populate("academicTerm")
@@ -104,7 +106,6 @@ const updatExam = async (req: Request, res: Response) => {
     examType,
     academicYear,
     classLevel,
-    teacherEmail,
   } = req.body;
   //check name exists
   const examFound = await Exam.findOne({ name });
@@ -113,14 +114,14 @@ const updatExam = async (req: Request, res: Response) => {
   }
 
   //check if teacher exists
-  const teacher = await Teacher.findOne({ email: teacherEmail });
+  const teacher = await Teacher.findOne({ token: req.headers.token });
 
   if (!teacher) {
     throw new Error("Teacher not found");
   }
 
-  const examUpdated = await Exam.findByIdAndUpdate(
-    req.params.id,
+  const examUpdated = await Exam.findOneAndUpdate(
+    {id:req.params.id},
     {
       name,
       description,
@@ -133,7 +134,7 @@ const updatExam = async (req: Request, res: Response) => {
       examType,
       academicYear,
       classLevel,
-      createdBy: teacher._id,
+      createdBy: teacher.id,
     },
     {
       new: true,

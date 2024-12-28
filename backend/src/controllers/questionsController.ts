@@ -14,7 +14,7 @@ const createQuestion = async (req: Request, res: Response) => {
     teacherEmail,
   } = req.body;
   //find the exam
-  const examFound = await Exam.findById(req.params.examID);
+  const examFound = await Exam.findOne({id:req.params.id});
   if (!examFound) {
     throw new Error("Exam not found");
   }
@@ -39,7 +39,7 @@ const createQuestion = async (req: Request, res: Response) => {
     createdBy: teacher._id,
   });
   //add the question into exam
-  examFound.questions.push(questionCreated?._id);
+  examFound.questions.push(questionCreated?.id);
   //save
   await examFound.save();
   res.status(201).json({

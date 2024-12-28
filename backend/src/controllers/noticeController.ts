@@ -1,12 +1,12 @@
 import Admin from "../models/Admin";
 import type { Request, Response } from "express";
 import Notice from "../models/Notice";
-
+import { v4 as uuidv4 } from "uuid";
 // create notice
 const createNotice = async (req: Request, res: Response) => {
-  const { title, details, date, adminEmail } = req.body;
+  const { title, details, date } = req.body;
 
-  const admin = await Admin.findOne({ email: adminEmail });
+  const admin = await Admin.findOne({ token: req.headers.token });
 
   if (!admin) {
     throw new Error("Admin not found");
@@ -16,6 +16,7 @@ const createNotice = async (req: Request, res: Response) => {
     details,
     date,
     createdBy: admin.id,
+    id: uuidv4().replace(/-/g, "").slice(0, 14),
   });
   await notice.save();
 
@@ -28,7 +29,7 @@ const createNotice = async (req: Request, res: Response) => {
 
 // get all notices
 const getNotices = async (req: Request, res: Response) => {
-  const notices = await Notice.find();
+  const notices = await Notice.find({});
 
   res.status(201).json({
     status: "success",
@@ -39,7 +40,7 @@ const getNotices = async (req: Request, res: Response) => {
 
 // get notice by id
 const getNotice = async (req: Request, res: Response) => {
-  const notice = await Notice.findById(req.params.id);
+  const notice = await Notice.findOne({id:req.params.id});
 
   res.status(201).json({
     status: "success",
@@ -50,15 +51,15 @@ const getNotice = async (req: Request, res: Response) => {
 
 // update notice
 const updateNotice = async (req: Request, res: Response) => {
-  const { title, details, date, adminEmail } = req.body;
-  const admin = await Admin.findOne({ email: adminEmail });
+  const { title, details, date } = req.body;
+  const admin = await Admin.findOne({ token: req.headers.token });
 
   if (!admin) {
     throw new Error("Admin not found");
   }
 
-  const notice = await Notice.findByIdAndUpdate(
-    req.params.id,
+  const notice = await Notice.findOneAndUpdate(
+    {id:req.params.id},
     {
       title,
       details,
@@ -77,7 +78,7 @@ const updateNotice = async (req: Request, res: Response) => {
 
 // delete notice
 const deleteNotice = async (req: Request, res: Response) => {
-  await Notice.findByIdAndDelete(req.params.id);
+  await Notice.findOneAndDelete({id:req.params.id});
 
   res.status(201).json({
     status: "success",

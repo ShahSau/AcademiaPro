@@ -11,16 +11,16 @@ const subjectSchema = new mongoose.Schema(
       required: true,
     },
     teacher: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: String,
       ref: "Teacher",
     },
     academicTerm: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: String,
       ref: "AcademicTerm",
       required: true,
     },
     createdBy: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: String,
       ref: "Admin",
       required: true,
     },
@@ -29,6 +29,11 @@ const subjectSchema = new mongoose.Schema(
       required: true,
       default: "3 months",
     },
+    id:{
+      type: String,
+      required: true,
+      unique: true,
+    }
   },
   { timestamps: true }
 );

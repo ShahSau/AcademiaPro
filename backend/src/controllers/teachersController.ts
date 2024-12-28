@@ -46,13 +46,24 @@ const loginTeacher = async (req: Request, res: Response) => {
   const isMatched = await isPassMatched(password, teacher?.password);
   if (!isMatched) {
     return res.json({ message: "Invalid login crendentials" });
-  } else {
+  } 
+  //generate token
+  const token = generateToken(teacher.id);
+
+  teacher.token = token;
+  
+  await teacher.save();
+
     res.status(200).json({
-      status: "success",
-      message: "Teacher logged in successfully",
-      data: generateToken(teacher?.teacherId),
+      message: "Admin logged in successfully",
+      success: true,
+      data: {
+        name: teacher.name,
+        email: teacher.email,
+        token: teacher.token,
+        id: teacher.id
+      },
     });
-  }
 };
 
 const getAllTeachersAdmin = async (req: Request, res: Response) => {

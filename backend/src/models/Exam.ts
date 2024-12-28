@@ -12,12 +12,12 @@ const examSchema = new mongoose.Schema(
       required: true,
     },
     subject: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: String,
       ref: "Subject",
       required: true,
     },
     program: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: String,
       ref: "Program",
       required: true,
     },
@@ -33,7 +33,7 @@ const examSchema = new mongoose.Schema(
     },
 
     academicTerm: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: String,
       ref: "AcademicTerm",
       required: true,
     },
@@ -55,6 +55,7 @@ const examSchema = new mongoose.Schema(
       type: String,
       required: true,
       default: "Quiz",
+      enum: ["Quiz", "Exam"],
     },
     examStatus: {
       type: String,
@@ -64,22 +65,22 @@ const examSchema = new mongoose.Schema(
     },
     questions: [
       {
-        type: mongoose.Schema.Types.ObjectId,
+        type: String,
         ref: "Question",
       },
     ],
     classLevel: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: String,
       ref: "ClassLevel",
       required: true,
     },
     createdBy: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: String,
       ref: "Teacher",
       required: true,
     },
     academicYear: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: String,
       ref: "AcademicYear",
       required: true,
     },
@@ -88,6 +89,11 @@ const examSchema = new mongoose.Schema(
       required: true,
       default: false,
     },
+    id:{
+      type: String,
+      required: true,
+      unique: true
+    }
   },
   { timestamps: true }
 );

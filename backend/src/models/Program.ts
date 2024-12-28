@@ -16,51 +16,44 @@ const ProgramSchema = new mongoose.Schema(
       default: "4 years",
     },
     code: {
-      type: String, // Code will be set dynamically
+      type: String,// Code will be set dynamically
+      required: true,
     },
     createdBy: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: String,
       ref: "Admin",
       required: true,
     },
     teachers: [
       {
-        type: mongoose.Schema.Types.ObjectId,
+        type: String,
         ref: "Teacher",
       },
     ],
     students: [
       {
-        type: mongoose.Schema.Types.ObjectId,
+        type: String,
         ref: "Student",
         default: [],
       },
     ],
     subjects: [
       {
-        type: mongoose.Schema.Types.ObjectId,
+        type: String,
         ref: "Subject",
         default: [],
       },
     ],
+    id:{
+      type: String,
+      required: true,
+      unique: true,
+    }
   },
   { timestamps: true }
 );
 
-// Pre-save middleware to generate the `code`
-ProgramSchema.pre("save", function (next) {
-  if (!this.code) {
-    this.code =
-      this.name
-        .split(" ")
-        .map((word) => word[0])
-        .join("")
-        .toUpperCase() +
-      Math.floor(10 + Math.random() * 90) +
-      Math.floor(10 + Math.random() * 90);
-  }
-  next();
-});
+
 
 const Program = mongoose.model("Program", ProgramSchema);
 

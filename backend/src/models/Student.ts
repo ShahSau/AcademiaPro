@@ -23,6 +23,7 @@ interface StudentDocument extends Document {
   prefectName?: string;
   yearGraduated?: string;
   id: string;
+  token: string;
 }
 
 // Define the schema
@@ -109,6 +110,9 @@ const studentSchema = new mongoose.Schema<StudentDocument>(
       type: String,
       required: true,
     },
+    token:{
+      type: String
+    }
   },
   {
     timestamps: true,

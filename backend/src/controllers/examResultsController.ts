@@ -3,16 +3,16 @@ import Student from "../models/Student";
 import type { Request, Response } from "express";
 
 const checkExamResults = async (req: Request, res: Response) => {
-  const studentEmail = req.body.email;
   //find the student
-  const studentFound = await Student.findOne({ email: studentEmail });
+  const studentFound = await Student.findOne({ token: req.headers.token });
+
   if (!studentFound) {
     throw new Error("No Student Found");
   }
   //find the exam results
   const examResult = await ExamResult.findOne({
     studentID: studentFound?.studentId,
-    _id: req.params.id,
+    id: req.params.id,
   })
     .populate({
       path: "exam",
@@ -46,12 +46,12 @@ const getAllExamResults = async (req: Request, res: Response) => {
 
 const adminToggleExamResult = async (req: Request, res: Response) => {
   //find the exam Results
-  const examResult = await ExamResult.findById(req.params.id);
+  const examResult = await ExamResult.findOne({id:req.params.id});
   if (!examResult) {
     throw new Error("Exam result not foound");
   }
-  const publishResult = await ExamResult.findByIdAndUpdate(
-    req.params.id,
+  const publishResult = await ExamResult.findOneAndUpdate(
+    {id:req.params.id},
     {
       isPublished: req.body.publish,
     },

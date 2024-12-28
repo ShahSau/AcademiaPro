@@ -4,12 +4,12 @@ import mongoose from "mongoose";
 const examResultSchema = new mongoose.Schema(
   {
     student: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: String,
       ref: "Student",
       required: true,
     },
     exam: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: String,
       ref: "Exam",
       required: true,
     },
@@ -46,20 +46,20 @@ const examResultSchema = new mongoose.Schema(
     },
 
     subject: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: String,
       ref: "Subject",
     },
     classLevel: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: String,
       ref: "ClassLevel",
     },
     academicTerm: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: String,
       ref: "AcademicTerm",
       required: true,
     },
     academicYear: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: String,
       ref: "AcademicYear",
       required: true,
     },
@@ -67,6 +67,11 @@ const examResultSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    id:{
+      type: String,
+      required: true,
+      unique: true,
+    }
   },
   {
     timestamps: true,

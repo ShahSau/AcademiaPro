@@ -66,6 +66,9 @@ const teacherSchema = new mongoose.Schema(
     academicTerm: {
       type: String,
     },
+    token:{
+      type:String
+    }
   },
   {
     timestamps: true,
