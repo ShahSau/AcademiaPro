@@ -10,10 +10,10 @@ interface StudentDocument extends Document {
   role: string;
   classLevels: string[];
   currentClassLevel?: string;
-  academicYear: mongoose.Types.ObjectId;
+  academicYear: String;
   dateAdmitted: Date;
-  examResults: mongoose.Types.ObjectId[];
-  program: mongoose.Types.ObjectId;
+  examResults: String[];
+  program: String;
   isPromotedToLevel200: boolean;
   isPromotedToLevel300: boolean;
   isPromotedToLevel400: boolean;
@@ -41,10 +41,6 @@ const studentSchema = new mongoose.Schema<StudentDocument>(
       type: String,
       required: true,
     },
-    studentId: {
-      type: String,
-      required: true,
-    },
     role: {
       type: String,
       default: "student",
@@ -59,7 +55,7 @@ const studentSchema = new mongoose.Schema<StudentDocument>(
       type: String,
     },
     academicYear: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: String,
       ref: "AcademicYear",
     },
     dateAdmitted: {
@@ -68,12 +64,12 @@ const studentSchema = new mongoose.Schema<StudentDocument>(
     },
     examResults: [
       {
-        type: mongoose.Schema.Types.ObjectId,
+        type: String,
         ref: "ExamResult",
       },
     ],
     program: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: String,
       ref: "Program",
     },
     isPromotedToLevel200: {
@@ -118,29 +114,6 @@ const studentSchema = new mongoose.Schema<StudentDocument>(
     timestamps: true,
   }
 );
-
-// Pre-save middleware to generate `studentId`
-studentSchema.pre<StudentDocument>("save", function (next) {
-  if (!this.studentId) {
-    this.studentId =
-      "STU" +
-      Math.floor(100 + Math.random() * 900) +
-      Date.now().toString().slice(2, 4) +
-      this.name
-        .split(" ")
-        .map((name) => name[0])
-        .join("")
-        .toUpperCase();
-  }
-
-  // Set currentClassLevel based on the last element in classLevels
-  if (this.classLevels && this.classLevels.length > 0) {
-    this.currentClassLevel =
-      this.classLevels[this.classLevels.length - 1].toString();
-  }
-
-  next();
-});
 
 // Model
 const Student = mongoose.model<StudentDocument>("Student", studentSchema);

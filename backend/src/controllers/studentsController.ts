@@ -88,8 +88,7 @@ const loginStudent = async (req: Request, res: Response) => {
 
 const getStudentProfile = async (req: Request, res: Response) => {
   try {
-    const studentEmail = req.body.email;
-    const student = await Student.findOne({ email: studentEmail })
+    const student = await Student.findOne({ token: req.headers.token })
       .select("-password -createdAt -updatedAt")
       .populate({
         path: "examResults",
@@ -112,20 +111,22 @@ const getStudentProfile = async (req: Request, res: Response) => {
     };
 
     //get student exam results
-    const examResults = student.examResults;
+    // const examResults = student.examResults;
     //current exam
-    const currentExamResult = examResults[examResults.length - 1];
+    // const currentExamResult = examResults[examResults.length - 1];
 
-    //check if exam is published
-    const isPublished =
-      await ExamResult.findById(currentExamResult).select("isPublished");
+    // toDo
+    //add exam results to student profile
+    // const isPublished =
+    //   await ExamResult.findById(currentExamResult).select("isPublished");
 
     //send response
     res.status(200).json({
       status: "success",
       data: {
         studentProfile,
-        currentExamResult: isPublished ? currentExamResult : [],
+        // currentExamResult: isPublished ? currentExamResult : [],
+        currentExamResult: [],
       },
       message: "Student Profile fetched  successfully",
     });
@@ -139,11 +140,21 @@ const getStudentProfile = async (req: Request, res: Response) => {
 
 const getAllStudentsByAdmin = async (req: Request, res: Response) => {
   try {
-    const students = await Student.find();
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10;
+    const skip = (page - 1) * limit;
+
+    const students = await Student.find().skip(skip).limit(limit);
+    const total = await Student.countDocuments();
     res.status(200).json({
       status: "success",
       message: "Students fetched successfully",
       data: students,
+      pagination: {
+        total,
+        page,
+        pages: Math.ceil(total / limit),
+      },
     });
   } catch (error) {
     res.status(400).json({
@@ -234,44 +245,45 @@ const adminUpdateStudent = async (req: Request, res: Response) => {
       classLevels,
       academicYear,
       program,
-      name,
-      email,
-      prefectName,
-      isSuspended,
-      isExpeled,
+      Suspended,
+      Expeled,
+      Graduated,
     } = req.body;
 
     //find the student by id
-    const studentFound = await Student.findById(req.params.studentID);
+    const studentFound = await Student.findOne({ id: req.params.studentID });
     if (!studentFound) {
       throw new Error("Student not found");
     }
 
-    //update
-    const studentUpdated = await Student.findByIdAndUpdate(
-      req.params.studentID,
-      {
-        $set: {
-          name,
-          email,
-          academicYear,
-          program,
-          prefectName,
-          isSuspended,
-          isExpeled,
-        },
-        $addToSet: {
-          classLevels,
-        },
-      },
-      {
-        new: true,
-      }
-    );
+    if (studentFound.isGraduated) {
+      throw new Error("Student has graduated, you can't update the student");
+    }
+
+    if (Graduated !== undefined) {
+      studentFound.isGraduated = Graduated;
+    }
+    if (Suspended !== undefined) {
+      studentFound.isSuspended = Suspended;
+    }
+    if (Expeled !== undefined) {
+      studentFound.isExpeled = Expeled;
+    }
+
+    if (classLevels) {
+      studentFound.classLevels = classLevels;
+    }
+    if (academicYear) {
+      studentFound.academicYear = academicYear;
+    }
+    if (program) {
+      studentFound.program = program;
+    }
     //send response
+    await studentFound.save();
     res.status(200).json({
       status: "success",
-      data: studentUpdated,
+      data: studentFound,
       message: "Student updated successfully",
     });
   } catch (error) {
@@ -390,7 +402,7 @@ const writeExam = async (req: Request, res: Response) => {
         answeredQuestions: answeredQuestions,
       });
       // //push the results into
-      studentFound.examResults.push(examResults?._id);
+      studentFound.examResults.push(examResults?.id);
       // //save
       await studentFound.save();
 

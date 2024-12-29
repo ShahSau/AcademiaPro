@@ -5,6 +5,7 @@ import isTeacher from "../middlewares/isTeacher";
 import {
   adminRegisterTeacher,
   adminUpdateTeacher,
+  getAllTeachersAdmin,
   getTeacherByAdmin,
   getTeacherProfile,
   loginTeacher,
@@ -302,11 +303,6 @@ teachersRouter.put(
   adminUpdateTeacher
 );
 
-
-
-
-
-
 // teachersRouter.get(
 //   "/admin",
 //   verifyToken,
@@ -320,7 +316,38 @@ teachersRouter.put(
 //   getAllTeachersAdmin
 // );
 
-
+/**
+ * @swagger
+ * /api/v1/teachers/admin/all:
+ *   get:
+ *     summary: Get all teachers by admin
+ *     description: Get all teachers by admin
+ *     tags:
+ *       - Admin
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: header
+ *         name: token
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: JWT
+ *         description: Token for authorization.
+ *     responses:
+ *       200:
+ *         description: A successful response
+ *       400:
+ *         description: Bad request
+ *       500:
+ *         description: Internal server error
+ */
+teachersRouter.get(
+  "/admin/all",
+  verifyToken,
+  isAdmin,
+  getAllTeachersAdmin
+);
 
 
 export default teachersRouter;
