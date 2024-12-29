@@ -7,7 +7,6 @@ import adminRouter from "./routes/adminRouter";
 import academicTermRouter from "./routes/academicTermRouter";
 import academicYearRouter from "./routes/academicYearRouter";
 import classLevelRouter from "./routes/classLevelRouter";
-import examResultRouter from "./routes/examRsultsRouter";
 import examRouter from "./routes/examRouter";
 import programRouter from "./routes/programRouter";
 import questionsRouter from "./routes/questionRouter";
@@ -55,7 +54,6 @@ app.use("/api/v1/exams", examRouter);
 app.use("/api/v1/students", studentRouter);
 app.use("/api/v1/questions", questionsRouter);
 app.use("/api/v1/notices", noticeRouter);
-app.use("/api/v1/exam-results", examResultRouter);
 
 //Error middlewares
 app.use(notFoundErr);

@@ -27,7 +27,7 @@ const questionSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    id:{
+    id: {
       type: String,
       required: true,
     },

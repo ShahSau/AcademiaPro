@@ -2,15 +2,7 @@ import express from "express";
 import verifyToken from "../middlewares/verifyToken";
 import isAdmin from "../middlewares/isAdmin";
 import {
-  adminExpelStudentCtrl,
-  adminGraduateStudentCtrl,
-  adminPublishResultsCtrl,
-  adminRemoveTeacherCtrl,
-  adminSuspendStudentCtrl,
-  adminSuspendTeacherCtrl,
-  adminUnPublishResultsCtrl,
-  adminUnSuspendStudentCtrl,
-  adminUnSuspendTeacherCtrl,
+  changeResultStatus,
   deleteAdminController,
   loginAdminController,
   registerAdminController,
@@ -210,81 +202,37 @@ adminRouter.delete("/:id", verifyToken, isAdmin, deleteAdminController);
 
 adminRouter.put("/update", verifyToken, isAdmin, updateAdminController);
 
-// suspend teacher
-adminRouter.put(
-  "/suspend/teacher/:id",
-  verifyToken,
-  isAdmin,
-  adminSuspendTeacherCtrl
-);
-
-//unsuspend teacher
-adminRouter.put(
-  "/unsuspend/teacher/:id",
-  verifyToken,
-  isAdmin,
-  adminUnSuspendTeacherCtrl
-);
-
-//teacher left or fired
-adminRouter.put(
-  "/withdraw/teacher/:id",
-  verifyToken,
-  isAdmin,
-  adminRemoveTeacherCtrl
-);
-
-//publish exams
-adminRouter.put(
-  "/publish/exam/:id",
-  verifyToken,
-  isAdmin,
-  adminPublishResultsCtrl
-);
-
-//unpublish exams results
-adminRouter.put(
-  "/unpublish/exam/:id",
-  verifyToken,
-  isAdmin,
-  adminUnPublishResultsCtrl
-);
-
-// suspend student
-adminRouter.put(
-  "/suspend/student/:id",
-  verifyToken,
-  isAdmin,
-  adminSuspendStudentCtrl
-);
-
-//unsuspend student
-adminRouter.put(
-  "/unsuspend/student/:id",
-  verifyToken,
-  isAdmin,
-  adminUnSuspendStudentCtrl
-);
-
-//student graduated
-adminRouter.put(
-  "/graduate/student/:id",
-  verifyToken,
-  isAdmin,
-  adminGraduateStudentCtrl
-);
-
-// student is expelled
-adminRouter.put(
-  "/expel/student/:id",
-  verifyToken,
-  isAdmin,
-  adminExpelStudentCtrl
-);
-
-//get all
-adminRouter.get("/", (req, res) => {
-  res.send("Admins route");
-});
+/**
+ * @swagger
+ * /api/v1/admins/publish/exam/{id}:
+ *   put:
+ *     summary: Publish exam result
+ *     tags:
+ *       - Admin
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: header
+ *         name: token
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: JWT
+ *         description: Token for authorization.
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The exam ID.
+ *     responses:
+ *       200:
+ *         description: Exam result published successfully.
+ *       400:
+ *         description: Invalid request data.
+ *       500:
+ *         description: Error publishing exam result.
+ */
+adminRouter.put("/publish/exam/:id", verifyToken, isAdmin, changeResultStatus);
 
 export default adminRouter;

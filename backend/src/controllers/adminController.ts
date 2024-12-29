@@ -2,9 +2,7 @@ import type { Request, Response } from "express";
 import Admin from "../models/Admin";
 import bcrypt from "bcryptjs";
 import generateToken from "../utils/generateToken";
-import Teacher from "../models/Teacher";
 import Exam from "../models/Exam";
-import Student from "../models/Student";
 import generateUniqueId from "../utils/generateUniqueID";
 
 // Admin Registration
@@ -175,264 +173,36 @@ const updateAdminController = async (req: Request, res: Response) => {
   }
 };
 
-// suspend teacher
-const adminSuspendTeacherCtrl = async (req: Request, res: Response) => {
-  const { id } = req.params;
-
-  if (!id) {
-    return res.status(400).json({ message: "Teacher ID is required" });
-  }
-
-  try {
-    // Check if teacher exists in the database
-    const teacher = await Teacher.findOne({ teacherId: id });
-
-    if (!teacher) {
-      return res.status(400).json({ message: "Teacher does not exists" });
-    }
-
-    await Teacher.updateOne(
-      { teacherId: id },
-      {
-        isSuspended: true,
-      }
-    );
-
-    res.status(200).json({ message: "Teacher suspended successfully" });
-  } catch (error) {
-    res.status(500).json({ message: "Error suspending teacher", error });
-  }
-};
-
-// unsuspend teacher
-const adminUnSuspendTeacherCtrl = async (req: Request, res: Response) => {
-  const { id } = req.params;
-
-  if (!id) {
-    return res.status(400).json({ message: "Teacher ID is required" });
-  }
-
-  try {
-    // Check if teacher exists in the database
-    const teacher = await Teacher.findOne({ teacherId: id });
-
-    if (!teacher) {
-      return res.status(400).json({ message: "Teacher does not exists" });
-    }
-
-    await Teacher.updateOne(
-      { teacherId: id },
-      {
-        isSuspended: false,
-      }
-    );
-
-    res.status(200).json({ message: "Teacher unsuspended successfully" });
-  } catch (error) {
-    res.status(500).json({ message: "Error unsuspending teacher", error });
-  }
-};
-
-// teacher left or fired
-const adminRemoveTeacherCtrl = async (req: Request, res: Response) => {
-  const { id } = req.params;
-
-  if (!id) {
-    return res.status(400).json({ message: "Teacher ID is required" });
-  }
-
-  try {
-    // Check if teacher exists in the database
-    const teacher = await Teacher.findOne({ teacherId: id });
-
-    if (!teacher) {
-      return res.status(400).json({ message: "Teacher does not exists" });
-    }
-
-    await Teacher.updateOne(
-      { teacherId: id },
-      {
-        employedCurrently: false,
-      }
-    );
-
-    res.status(200).json({ message: "Teacher removed successfully" });
-  } catch (error) {
-    res.status(500).json({ message: "Error removing teacher", error });
-  }
-};
-
-// publish exam results
-const adminPublishResultsCtrl = async (req: Request, res: Response) => {
-  const { id } = req.params;
+const changeResultStatus = async (req: Request, res: Response) => {
+  const id = req.params.id;
 
   if (!id) {
     return res.status(400).json({ message: "Exam ID is required" });
   }
 
   try {
-    // Check if exam exists in the database
-    const exam = await Exam.findOne({ examId: id });
+    const exam = await Exam.findOne({ id });
 
     if (!exam) {
       return res.status(400).json({ message: "Exam does not exists" });
     }
 
     await Exam.updateOne(
-      { _id: id },
+      { id },
       {
-        resultsPublished: true,
+        ...exam,
+        resultPublished: !exam.resultPublished,
       }
     );
 
-    res.status(200).json({ message: "Exam results published successfully" });
+    res
+      .status(200)
+      .json({ message: "Exam results status updated successfully" });
   } catch (error) {
-    res.status(500).json({ message: "Error publishing exam results", error });
-  }
-};
-
-// unpublish exam results
-const adminUnPublishResultsCtrl = async (req: Request, res: Response) => {
-  const { id } = req.params;
-
-  if (!id) {
-    return res.status(400).json({ message: "Exam ID is required" });
-  }
-
-  try {
-    // Check if exam exists in the database
-    const exam = await Exam.findOne({ examId: id });
-
-    if (!exam) {
-      return res.status(400).json({ message: "Exam does not exists" });
-    }
-
-    await Exam.updateOne(
-      { _id: id },
-      {
-        resultsPublished: false,
-      }
-    );
-
-    res.status(200).json({ message: "Exam results unpublished successfully" });
-  } catch (error) {
-    res.status(500).json({ message: "Error unpublishing exam results", error });
-  }
-};
-
-// suspend student
-const adminSuspendStudentCtrl = async (req: Request, res: Response) => {
-  const { id } = req.params;
-
-  if (!id) {
-    return res.status(400).json({ message: "Student ID is required" });
-  }
-
-  try {
-    // Check if student exists in the database
-    const student = await Student.findOne({ studentId: id });
-
-    if (!student) {
-      return res.status(400).json({ message: "Student does not exists" });
-    }
-
-    await Student.updateOne(
-      { studentId: id },
-      {
-        isSuspended: true,
-      }
-    );
-
-    res.status(200).json({ message: "Student suspended successfully" });
-  } catch (error) {
-    res.status(500).json({ message: "Error suspending student", error });
-  }
-};
-
-// unsuspend student
-const adminUnSuspendStudentCtrl = async (req: Request, res: Response) => {
-  const { id } = req.params;
-
-  if (!id) {
-    return res.status(400).json({ message: "Student ID is required" });
-  }
-
-  try {
-    // Check if student exists in the database
-    const student = await Student.findOne({ studentId: id });
-
-    if (!student) {
-      return res.status(400).json({ message: "Student does not exists" });
-    }
-
-    await Student.updateOne(
-      { studentId: id },
-      {
-        isSuspended: false,
-      }
-    );
-
-    res.status(200).json({ message: "Student unsuspended successfully" });
-  } catch (error) {
-    res.status(500).json({ message: "Error unsuspending student", error });
-  }
-};
-
-// student graduated
-const adminGraduateStudentCtrl = async (req: Request, res: Response) => {
-  const { id } = req.params;
-
-  if (!id) {
-    return res.status(400).json({ message: "Student ID is required" });
-  }
-
-  try {
-    // Check if student exists in the database
-    const student = await Student.findOne({ studentId: id });
-
-    if (!student) {
-      return res.status(400).json({ message: "Student does not exists" });
-    }
-
-    await Student.updateOne(
-      { studentId: id },
-      {
-        graduated: true,
-      }
-    );
-
-    res.status(200).json({ message: "Student graduated successfully" });
-  } catch (error) {
-    res.status(500).json({ message: "Error graduating student", error });
-  }
-};
-
-// student is expelled
-const adminExpelStudentCtrl = async (req: Request, res: Response) => {
-  const { id } = req.params;
-
-  if (!id) {
-    return res.status(400).json({ message: "Student ID is required" });
-  }
-
-  try {
-    // Check if student exists in the database
-    const student = await Student.findOne({ studentId: id });
-
-    if (!student) {
-      return res.status(400).json({ message: "Student does not exists" });
-    }
-
-    await Student.updateOne(
-      { studentId: id },
-      {
-        expelled: true,
-      }
-    );
-
-    res.status(200).json({ message: "Student expelled successfully" });
-  } catch (error) {
-    res.status(500).json({ message: "Error expelling student", error });
+    res.status(500).json({
+      message: "Error changing exam result status",
+      error: (error as Error).message,
+    });
   }
 };
 
@@ -441,13 +211,5 @@ export {
   loginAdminController,
   deleteAdminController,
   updateAdminController,
-  adminSuspendTeacherCtrl,
-  adminUnSuspendTeacherCtrl,
-  adminRemoveTeacherCtrl,
-  adminPublishResultsCtrl,
-  adminUnPublishResultsCtrl,
-  adminSuspendStudentCtrl,
-  adminUnSuspendStudentCtrl,
-  adminGraduateStudentCtrl,
-  adminExpelStudentCtrl,
+  changeResultStatus,
 };
