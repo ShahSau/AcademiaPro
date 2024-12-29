@@ -44,7 +44,7 @@ const createSubject = async (req: Request, res: Response) => {
   } catch (error) {
     res.status(400).json({
       status: "error",
-      message: error,
+      message: (error as Error).message,
     });
   }
 };
@@ -60,7 +60,7 @@ const getSubjects = async (req: Request, res: Response) => {
   } catch (error) {
     res.status(400).json({
       status: "error",
-      message: error,
+      message: (error as Error).message,
     });
   }
 };
@@ -76,7 +76,7 @@ const getSubject = async (req: Request, res: Response) => {
   } catch (error) {
     res.status(400).json({
       status: "error",
-      message: error,
+      message: (error as Error).message,
     });
   }
 };
@@ -146,7 +146,7 @@ const updateSubject = async (req: Request, res: Response) => {
   } catch (error) {
     res.status(400).json({
       status: "error",
-      message: error,
+      message: (error as Error).message,
     });
   }
 };

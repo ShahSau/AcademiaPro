@@ -36,13 +36,8 @@ const teacherSchema = new mongoose.Schema(
       default: "teacher",
     },
     subject: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Subject",
-    },
-    applicationStatus: {
       type: String,
-      enum: ["pending", "approved", "rejected"],
-      default: "pending",
+      ref: "Subject",
     },
     program: {
       type: String,
@@ -55,12 +50,12 @@ const teacherSchema = new mongoose.Schema(
     },
     examsCreated: [
       {
-        type: mongoose.Schema.Types.ObjectId,
+        type: String,
         ref: "Exam",
       },
     ],
     createdBy: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: String,
       ref: "Admin",
     },
     academicTerm: {

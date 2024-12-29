@@ -36,7 +36,7 @@ const createAcademicTerm = async (req: Request, res: Response) => {
   } catch (error) {
     res.status(400).json({
       status: "error",
-      message: error,
+      message: (error as Error).message,
     });
   }
 };
@@ -54,7 +54,7 @@ const getAcademicTerms = async (req: Request, res: Response) => {
   } catch (error) {
     res.status(400).json({
       status: "error",
-      message: error,
+      message: (error as Error).message,
     });
   }
 };
@@ -76,7 +76,7 @@ const getAcademicTerm = async (req: Request, res: Response) => {
   } catch (error) {
     res.status(400).json({
       status: "error",
-      message: error,
+      message: (error as Error).message,
     });
   }
 };
@@ -112,7 +112,7 @@ const updateAcademicTerms = async (req: Request, res: Response) => {
   } catch (error) {
     res.status(400).json({
       status: "error",
-      message: error,
+      message: (error as Error).message,
     });
   }
 };
@@ -135,7 +135,7 @@ const deleteAcademicTerm = async (req: Request, res: Response) => {
   } catch (error) {
     res.status(400).json({
       status: "error",
-      message: error,
+      message: (error as Error).message,
     });
   }
 };

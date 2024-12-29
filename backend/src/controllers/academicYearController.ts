@@ -40,7 +40,7 @@ const createAcademicYear = async (req: Request, res: Response) => {
   } catch (error) {
     res.status(400).json({
       status: "error",
-      message: error,
+      message: (error as Error).message,
     });
   }
 };
@@ -58,7 +58,7 @@ const getAcademicYears = async (req: Request, res: Response) => {
   } catch (error) {
     res.status(400).json({
       status: "error",
-      message: error,
+      message: (error as Error).message,
     });
   }
 };
@@ -76,7 +76,7 @@ const getAcademicYear = async (req: Request, res: Response) => {
   } catch (error) {
     res.status(400).json({
       status: "error",
-      message: error,
+      message: (error as Error).message,
     });
   }
 };
@@ -120,7 +120,7 @@ const updateAcademicYear = async (req: Request, res: Response) => {
   } catch (error) {
     res.status(400).json({
       status: "error",
-      message: error,
+      message: (error as Error).message,
     });
   }
 };
@@ -143,7 +143,7 @@ const deleteAcademicYear = async (req: Request, res: Response) => {
   } catch (error) {
     res.status(400).json({
       status: "error",
-      message: error,
+      message: (error as Error).message,
     });
   }
 };

@@ -47,7 +47,7 @@ const createYearGroup = async (req: Request, res: Response) => {
   } catch (error) {
     res.status(400).json({
       status: "error",
-      message: error,
+      message: (error as Error).message,
     });
   }
 };
@@ -63,7 +63,7 @@ const getYearGroups = async (req: Request, res: Response) => {
   } catch (error) {
     res.status(400).json({
       status: "error",
-      message: error,
+      message: (error as Error).message,
     });
   }
 };
@@ -79,7 +79,7 @@ const getYearGroup = async (req: Request, res: Response) => {
   } catch (error) {
     res.status(400).json({
       status: "error",
-      message: error,
+      message: (error as Error).message,
     });
   }
 };
@@ -147,7 +147,7 @@ const deleteYearGroup = async (req: Request, res: Response) => {
   } catch (error) {
     res.status(400).json({
       status: "error",
-      message: error,
+      message: (error as Error).message,
     });
   }
 };

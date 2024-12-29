@@ -34,7 +34,7 @@ const createClassLevel = async (req: Request, res: Response) => {
   } catch (error) {
     res.status(400).json({
       status: "error",
-      message: error,
+      message: (error as Error).message,
     });
   }
 };
@@ -52,7 +52,7 @@ const getClassLevels = async (req: Request, res: Response) => {
   } catch (error) {
     res.status(400).json({
       status: "error",
-      message: error,
+      message: (error as Error).message,
     });
   }
 };
@@ -102,7 +102,7 @@ const updateClassLevel = async (req: Request, res: Response) => {
   } catch (error) {
     res.status(400).json({
       status: "error",
-      message: error,
+      message: (error as Error).message,
     });
   }
 };
@@ -123,7 +123,7 @@ const deleteClassLevel = async (req: Request, res: Response) => {
   } catch (error) {
     res.status(400).json({
       status: "error",
-      message: error,
+      message: (error as Error).message,
     });
   }
 };
