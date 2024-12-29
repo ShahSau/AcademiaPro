@@ -40,7 +40,7 @@ const adminSchema = new mongoose.Schema(
     ],
     yearGroups: [
       {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Object,
         ref: "YearGroup",
       },
     ],

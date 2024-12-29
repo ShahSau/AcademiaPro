@@ -16,6 +16,7 @@ import subjectRouter from "./routes/subjectsRouter";
 import teacherRouter from "./routes/teacherRouter";
 import yearGroupRouter from "./routes/yearGroupsRouter";
 import { globalErrHandler, notFoundErr } from "./middlewares/globalErrHandler";
+import noticeRouter from "./routes/noticeRouter";
 
 const app = express();
 app.use(express.json());
@@ -53,6 +54,7 @@ app.use("/api/v1/teachers", teacherRouter);
 app.use("/api/v1/exams", examRouter);
 app.use("/api/v1/students", studentRouter);
 app.use("/api/v1/questions", questionsRouter);
+app.use("/api/v1/notices", noticeRouter);
 app.use("/api/v1/exam-results", examResultRouter);
 
 //Error middlewares

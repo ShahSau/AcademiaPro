@@ -7,13 +7,17 @@ const yearGroupSchema = new mongoose.Schema(
       required: true,
     },
     createdBy: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: String,
       ref: "Admin",
       required: true,
     },
     academicYear: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Object,
       ref: "AcademicYear",
+      required: true,
+    },
+    id: {
+      type: String,
       required: true,
     },
   },
