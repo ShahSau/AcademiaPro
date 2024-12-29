@@ -86,7 +86,6 @@ const examSchema = new mongoose.Schema(
     },
     resultPublished: {
       type: Boolean,
-      required: true,
       default: false,
     },
     id: {

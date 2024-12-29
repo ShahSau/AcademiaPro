@@ -21,8 +21,6 @@ const createExam = async (req: Request, res: Response) => {
       totalMark,
       classLevel,
       examStatus,
-      resultPublished,
-      questions,
     } = req.body;
     //check name exists
     const examFound = await Exam.findOne({ name });
@@ -49,19 +47,18 @@ const createExam = async (req: Request, res: Response) => {
       examTime,
       examType,
       examStatus,
-      questions,
       academicYear,
       classLevel,
-      resultPublished,
-      createdBy: teacher.id,
+      createdBy: teacher.teacherId,
       id: uuidv4().replace(/-/g, "").slice(0, 18),
     });
 
-    const createdExam = await exam.save();
+    await exam.save();
+
     res.status(201).json({
       status: "success",
       message: "Exam created successfully",
-      data: createdExam,
+      data: exam,
     });
   } catch (error) {
     res.status(400).json({
@@ -130,9 +127,10 @@ const updatExam = async (req: Request, res: Response) => {
       classLevel,
     } = req.body;
     //check name exists
-    const examFound = await Exam.findOne({ name });
-    if (examFound) {
-      throw new Error("Exam already exists");
+    const examFound = await Exam.findOne({ id: req.params.id });
+
+    if (!examFound) {
+      throw new Error("Exam does not exist");
     }
 
     //check if teacher exists

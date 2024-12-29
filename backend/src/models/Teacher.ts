@@ -70,22 +70,6 @@ const teacherSchema = new mongoose.Schema(
   }
 );
 
-// Generate teacherId in a pre-save hook
-teacherSchema.pre("save", function (next) {
-  if (!this.teacherId) {
-    this.teacherId =
-      "TEA" +
-      Math.floor(100 + Math.random() * 900) +
-      Date.now().toString().slice(2, 4) +
-      this.name
-        .split(" ")
-        .map((name) => name[0])
-        .join("")
-        .toUpperCase();
-  }
-  next();
-});
-
 //model
 const Teacher = mongoose.model("Teacher", teacherSchema);
 

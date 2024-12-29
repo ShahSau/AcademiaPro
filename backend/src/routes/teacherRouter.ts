@@ -342,12 +342,6 @@ teachersRouter.put(
  *       500:
  *         description: Internal server error
  */
-teachersRouter.get(
-  "/admin/all",
-  verifyToken,
-  isAdmin,
-  getAllTeachersAdmin
-);
-
+teachersRouter.get("/admin/all", verifyToken, isAdmin, getAllTeachersAdmin);
 
 export default teachersRouter;

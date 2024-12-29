@@ -330,7 +330,6 @@ studentRouter.put(
  */
 studentRouter.get("/admin/all", verifyToken, isAdmin, getAllStudentsByAdmin);
 
-
 // studentRouter.post("/exam/:examID/write", verifyToken, isStudent, writeExam);
 
 export default studentRouter;
