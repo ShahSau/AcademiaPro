@@ -266,4 +266,7 @@ examRouter.get("/:id", verifyToken, isTeacher, getExam);
  */
 examRouter.put("/:id", verifyToken, isTeacher, updatExam);
 
+//todo
+//get all questions for an exam by teacher
+
 export default examRouter;

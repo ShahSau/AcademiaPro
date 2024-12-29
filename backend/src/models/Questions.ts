@@ -27,13 +27,21 @@ const questionSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    id:{
+      type: String,
+      required: true,
+    },
     isCorrect: {
       type: Boolean,
       default: false,
     },
     createdBy: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: String,
       ref: "Teacher",
+      required: true,
+    },
+    examId: {
+      type: String,
       required: true,
     },
   },
