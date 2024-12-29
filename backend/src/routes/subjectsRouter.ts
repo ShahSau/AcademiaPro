@@ -15,7 +15,7 @@ const subjectRouter = express.Router();
  * /api/v1/subjects/{programID}:
  *   post:
  *     tags:
- *       - Subjects
+ *       - Admin
  *     summary: Create a new subject
  *     description: Only admins can create subjects
  *     security:
@@ -78,7 +78,7 @@ subjectRouter.post("/:programID", verifyToken, isAdmin, createSubject);
  * /api/v1/subjects:
  *   get:
  *     tags:
- *       - Subjects
+ *       - Admin
  *     summary: Get all subjects
  *     description: Only admins can get all subjects
  *     security:
@@ -106,7 +106,7 @@ subjectRouter.get("/", verifyToken, isAdmin, getSubjects);
  * /api/v1/subjects/{id}:
  *   get:
  *     tags:
- *       - Subjects
+ *       - Admin
  *     summary: Get a subject
  *     description: Only admins can get a subject
  *     security:
@@ -140,7 +140,7 @@ subjectRouter.get("/:id", verifyToken, isAdmin, getSubject);
  * /api/v1/subjects/{id}:
  *   put:
  *     tags:
- *       - Subjects
+ *       - Admin
  *     summary: Update a subject
  *     description: Only admins can update a subject
  *     security:

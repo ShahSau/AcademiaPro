@@ -170,7 +170,7 @@ studentRouter.get("/:studentID/admin", verifyToken, isAdmin, getStudentByAdmin);
  *     summary: Update teacher by admin
  *     description: Update teacher by admin
  *     tags:
- *       - Admin
+ *       - Students
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -194,30 +194,14 @@ studentRouter.get("/:studentID/admin", verifyToken, isAdmin, getStudentByAdmin);
  *           schema:
  *             type: object
  *             properties:
- *               program:
+ *               email:
  *                 type: string
- *                 description: ID of the program
- *                 example: 60f3b3b3b3b3b3b3b3b3b3b3
- *               classLevel:
+ *                 description: Email of the student
+ *                 example: john.doe@email.com
+ *               password:
  *                 type: string
- *                 description: ID of the class level
- *                 example: 60f3b3b3b3b3b3b3b3b3b3
- *               academicYear:
- *                 type: string
- *                 description: ID of the academic year
- *                 example: 60f3b3b3b3b3b3b3b3b3b3
- *               subject:
- *                 type: string
- *                 description: ID of the subject
- *                 example: 60f3b3b3b3b3b3b3b3b3b3
- *               employed:
- *                 type: boolean
- *                 description: Employment status of the teacher
- *                 example: true
- *               suspend:
- *                 type: boolean
- *                 description: Suspension status of the teacher
- *                 example: false
+ *                 description: Password of the student
+ *                 example: password
  *     responses:
  *       200:
  *         description: A successful response

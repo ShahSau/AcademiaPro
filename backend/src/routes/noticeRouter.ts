@@ -17,7 +17,7 @@ const noticeRouter = express.Router();
  *   post:
  *     summary: Create a notice
  *     tags:
- *       - Notice
+ *       - Admin
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -66,7 +66,7 @@ noticeRouter.post("/", verifyToken, isAdmin, createNotice);
  *   get:
  *     summary: Get all notices
  *     tags:
- *       - Notice
+ *       - Admin
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -95,7 +95,7 @@ noticeRouter.get("/", verifyToken, isAdmin, getNotices);
  *   get:
  *     summary: Get a notice by id
  *     tags:
- *       - Notice
+ *       - Admin
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -130,7 +130,7 @@ noticeRouter.get("/:id", verifyToken, isAdmin, getNotice);
  *   put:
  *     summary: Update a notice by id
  *     tags:
- *       - Notice
+ *       - Admin
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -185,7 +185,7 @@ noticeRouter.put("/:id", verifyToken, isAdmin, updateNotice);
  *   delete:
  *     summary: Delete a notice by id
  *     tags:
- *       - Notice
+ *       - Admin
  *     security:
  *       - bearerAuth: []
  *     parameters:

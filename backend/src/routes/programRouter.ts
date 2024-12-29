@@ -17,7 +17,7 @@ const programRouter = express.Router();
  * /api/v1/programs:
  *   post:
  *     tags:
- *       - Programs
+ *       - Admin
  *     summary: Create a new program
  *     description: Only admins can create programs
  *     security:
@@ -66,7 +66,7 @@ programRouter.post("/", verifyToken, isAdmin, createProgram);
  * /api/v1/programs:
  *  get:
  *    tags:
- *      - Programs
+ *      - Admin
  *    summary: Get all programs
  *    description: Only admins can fetch all programs
  *    security:
@@ -94,7 +94,7 @@ programRouter.get("/", verifyToken, isAdmin, getPrograms);
  * /api/v1/programs/{id}:
  *   get:
  *     tags:
- *       - Programs
+ *       - Admin
  *     summary: Get a program
  *     description: Only admins can get a program
  *     security:
@@ -132,7 +132,7 @@ programRouter.get("/:id", verifyToken, isAdmin, getProgram);
  * /api/v1/programs/{id}:
  *   put:
  *     tags:
- *       - Programs
+ *       - Admin
  *     summary: Update a program
  *     description: Only admins can update a program
  *     security:
@@ -191,7 +191,7 @@ programRouter.put("/:id", verifyToken, isAdmin, updatProgram);
  * /api/v1/programs/{id}:
  *   delete:
  *     tags:
- *       - Programs
+ *       - Admin
  *     summary: Delete a program
  *     description: Only admins can delete a program
  *     security:

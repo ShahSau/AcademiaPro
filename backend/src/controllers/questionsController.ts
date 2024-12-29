@@ -28,7 +28,7 @@ const createQuestion = async (req: Request, res: Response) => {
   if (!teacher) {
     throw new Error("Teacher not found");
   }
-  //create exam
+  //create the question
   const questionCreated = await Question.create({
     question,
     optionA,
@@ -36,10 +36,10 @@ const createQuestion = async (req: Request, res: Response) => {
     optionC,
     optionD,
     correctAnswer,
-    createdBy: teacher._id,
+    createdBy: teacher._id, ////////
   });
   //add the question into exam
-  examFound.questions.push(questionCreated?.id);
+  examFound.questions.push(questionCreated?.id); ///////
   //save
   await examFound.save();
   res.status(201).json({
@@ -87,7 +87,7 @@ const updateQuestion = async (req: Request, res: Response) => {
     throw new Error("Teacher not found");
   }
   const program = await Question.findByIdAndUpdate(
-    req.params.id,
+    req.params.id, //////
     {
       question,
       optionA,
@@ -95,7 +95,7 @@ const updateQuestion = async (req: Request, res: Response) => {
       optionC,
       optionD,
       correctAnswer,
-      createdBy: teacher._id,
+      createdBy: teacher._id, ////////
     },
     {
       new: true,

@@ -17,7 +17,7 @@ const yearGroupRouter = express.Router();
  *   post:
  *     summary: Create a new year group
  *     tags:
- *       - Year Groups
+ *       - Admin
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -62,7 +62,7 @@ yearGroupRouter.post("/", verifyToken, isAdmin, createYearGroup);
  *   get:
  *     summary: Get all year groups
  *     tags:
- *       - Year Groups
+ *       - Admin
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -91,7 +91,7 @@ yearGroupRouter.get("/", verifyToken, isAdmin, getYearGroups);
  *   get:
  *     summary: Get a year group by ID
  *     tags:
- *       - Year Groups
+ *       - Admin
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -126,7 +126,7 @@ yearGroupRouter.get("/:id", verifyToken, isAdmin, getYearGroup);
  *   put:
  *     summary: Update a year group by ID
  *     tags:
- *       - Year Groups
+ *       - Admin
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -177,7 +177,7 @@ yearGroupRouter.put("/:id", verifyToken, isAdmin, updateYearGroup);
  *   delete:
  *     summary: Delete a year group by ID
  *     tags:
- *       - Year Groups
+ *       - Admin
  *     security:
  *       - bearerAuth: []
  *     parameters:

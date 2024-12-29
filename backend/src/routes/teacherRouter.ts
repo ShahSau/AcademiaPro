@@ -303,19 +303,6 @@ teachersRouter.put(
   adminUpdateTeacher
 );
 
-// teachersRouter.get(
-//   "/admin",
-//   verifyToken,
-//   isAdmin,
-//   advancedResults(Teacher, {
-//     path: "examsCreated",
-//     populate: {
-//       path: "questions",
-//     },
-//   }),
-//   getAllTeachersAdmin
-// );
-
 /**
  * @swagger
  * /api/v1/teachers/admin/all:
