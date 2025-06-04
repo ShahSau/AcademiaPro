@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
 const ClassLevelSchema = new mongoose.Schema(
   {
@@ -11,27 +11,27 @@ const ClassLevelSchema = new mongoose.Schema(
       type: String,
     },
     createdBy: {
-      type: String,
+      type: Schema.Types.ObjectId,
       ref: "Admin",
       required: true,
     },
     //students will be added to the class level when they are registered
     students: [
       {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: "Student",
       },
     ],
     //optional.
     subjects: [
       {
-        type: String,
+        type: Schema.Types.ObjectId,
         ref: "Subject",
       },
     ],
     teachers: [
       {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: "Teacher",
       },
     ],

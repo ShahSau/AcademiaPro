@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
 const ProgramSchema = new mongoose.Schema(
   {
@@ -26,20 +26,20 @@ const ProgramSchema = new mongoose.Schema(
     },
     teachers: [
       {
-        type: String,
+        type: Schema.Types.ObjectId,
         ref: "Teacher",
       },
     ],
     students: [
       {
-        type: String,
+        type: Schema.Types.ObjectId,
         ref: "Student",
         default: [],
       },
     ],
     subjects: [
       {
-        type: Object,
+        type: Schema.Types.ObjectId,
         ref: "Subject",
         default: [],
       },

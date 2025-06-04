@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
 const yearGroupSchema = new mongoose.Schema(
   {
@@ -7,12 +7,12 @@ const yearGroupSchema = new mongoose.Schema(
       required: true,
     },
     createdBy: {
-      type: String,
+      type: Schema.Types.ObjectId,
       ref: "Admin",
       required: true,
     },
     academicYear: {
-      type: Object,
+      type: Schema.Types.ObjectId,
       ref: "AcademicYear",
       required: true,
     },

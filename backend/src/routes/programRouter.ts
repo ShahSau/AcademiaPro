@@ -7,7 +7,7 @@ import {
   deleteProgram,
   getProgram,
   getPrograms,
-  updatProgram,
+  updateProgram,
 } from "../controllers/programsController";
 
 const programRouter = express.Router();
@@ -184,7 +184,7 @@ programRouter.get("/:id", verifyToken, isAdmin, getProgram);
  *       500:
  *         description: Server error
  */
-programRouter.put("/:id", verifyToken, isAdmin, updatProgram);
+programRouter.put("/:id", verifyToken, isAdmin, updateProgram);
 
 /**
  * @swagger

@@ -81,7 +81,7 @@ const getProgram = async (req: Request, res: Response) => {
   }
 };
 
-const updatProgram = async (req: Request, res: Response) => {
+const updateProgram = async (req: Request, res: Response) => {
   try {
     const { name, description, duration } = req.body;
 
@@ -146,4 +146,4 @@ const deleteProgram = async (req: Request, res: Response) => {
   }
 };
 
-export { createProgram, getPrograms, getProgram, updatProgram, deleteProgram };
+export { createProgram, getPrograms, getProgram, updateProgram, deleteProgram };

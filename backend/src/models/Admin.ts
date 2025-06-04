@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 const adminSchema = new mongoose.Schema(
   {
     name: {
@@ -28,43 +28,43 @@ const adminSchema = new mongoose.Schema(
     },
     academicTerms: [
       {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: "AcademicTerm",
       },
     ],
     programs: [
       {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: "Program",
       },
     ],
     yearGroups: [
       {
-        type: Object,
+        type: Schema.Types.ObjectId,
         ref: "YearGroup",
       },
     ],
     academicYears: [
       {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: "AcademicYear",
       },
     ],
     classLevels: [
       {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: "ClassLevel",
       },
     ],
     teachers: [
       {
-        type: String,
+        type: Schema.Types.ObjectId,
         ref: "Teacher",
       },
     ],
     students: [
       {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: "Student",
       },
     ],

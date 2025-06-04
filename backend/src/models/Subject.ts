@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
 const subjectSchema = new mongoose.Schema(
   {
@@ -11,16 +11,16 @@ const subjectSchema = new mongoose.Schema(
       required: true,
     },
     teacher: {
-      type: String,
+      type: Schema.Types.ObjectId,
       ref: "Teacher",
     },
     academicTerm: {
-      type: String,
+      type: Schema.Types.ObjectId,
       ref: "AcademicTerm",
       required: true,
     },
     createdBy: {
-      type: String,
+      type: Schema.Types.ObjectId,
       ref: "Admin",
       required: true,
     },
@@ -30,7 +30,7 @@ const subjectSchema = new mongoose.Schema(
       default: "3 months",
     },
     programId: {
-      type: String,
+      type: Schema.Types.ObjectId,
       ref: "Program",
       required: true,
     },

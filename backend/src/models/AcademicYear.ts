@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
 const academicYearSchema = new mongoose.Schema(
   {
@@ -19,19 +19,19 @@ const academicYearSchema = new mongoose.Schema(
       default: false,
     },
     createdBy: {
-      type: String,
+      type: Schema.Types.ObjectId,
       ref: "Admin",
       required: true,
     },
     students: [
       {
-        type: String,
+        type: Schema.Types.ObjectId,
         ref: "Student",
       },
     ],
     teachers: [
       {
-        type: String,
+        type: Schema.Types.ObjectId,
         ref: "Teacher",
       },
     ],

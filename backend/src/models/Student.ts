@@ -1,33 +1,6 @@
-import mongoose from "mongoose";
-import type { Document } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
-// Define the Student document interface
-interface StudentDocument extends Document {
-  name: string;
-  email: string;
-  password: string;
-  studentId: string;
-  role: string;
-  classLevels: string[];
-  currentClassLevel?: string;
-  academicYear: String;
-  dateAdmitted: Date;
-  examResults: String[];
-  program: String;
-  isPromotedToLevel200: boolean;
-  isPromotedToLevel300: boolean;
-  isPromotedToLevel400: boolean;
-  isGraduated: boolean;
-  isExpeled: boolean;
-  isSuspended: boolean;
-  prefectName?: string;
-  yearGraduated?: string;
-  id: string;
-  token: string;
-}
-
-// Define the schema
-const studentSchema = new mongoose.Schema<StudentDocument>(
+const studentSchema = new mongoose.Schema(
   {
     name: {
       type: String,
@@ -36,10 +9,16 @@ const studentSchema = new mongoose.Schema<StudentDocument>(
     email: {
       type: String,
       required: true,
+      unique: true,
     },
     password: {
       type: String,
       required: true,
+    },
+    studentId: {
+      type: String, // will be created automatically
+      required: true,
+      unique: true,
     },
     role: {
       type: String,
@@ -47,7 +26,7 @@ const studentSchema = new mongoose.Schema<StudentDocument>(
     },
     classLevels: [
       {
-        type: String,
+        type: Schema.Types.ObjectId,
         ref: "ClassLevel",
       },
     ],
@@ -55,7 +34,7 @@ const studentSchema = new mongoose.Schema<StudentDocument>(
       type: String,
     },
     academicYear: {
-      type: String,
+      type: Schema.Types.ObjectId,
       ref: "AcademicYear",
     },
     dateAdmitted: {
@@ -64,12 +43,12 @@ const studentSchema = new mongoose.Schema<StudentDocument>(
     },
     examResults: [
       {
-        type: String,
+        type: Schema.Types.ObjectId,
         ref: "ExamResult",
       },
     ],
     program: {
-      type: String,
+      type: Schema.Types.ObjectId,
       ref: "Program",
     },
     isPromotedToLevel200: {
@@ -88,7 +67,7 @@ const studentSchema = new mongoose.Schema<StudentDocument>(
       type: Boolean,
       default: false,
     },
-    isExpeled: {
+    isExpelled: {
       type: Boolean,
       default: false,
     },
@@ -116,6 +95,6 @@ const studentSchema = new mongoose.Schema<StudentDocument>(
 );
 
 // Model
-const Student = mongoose.model<StudentDocument>("Student", studentSchema);
+const Student = mongoose.model("Student", studentSchema);
 
 export default Student;

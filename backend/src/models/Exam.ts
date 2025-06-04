@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
 //examSchema
 const examSchema = new mongoose.Schema(
@@ -12,12 +12,12 @@ const examSchema = new mongoose.Schema(
       required: true,
     },
     subject: {
-      type: String,
+      type: Schema.Types.ObjectId,
       ref: "Subject",
       required: true,
     },
     program: {
-      type: String,
+      type: Schema.Types.ObjectId,
       ref: "Program",
       required: true,
     },
@@ -33,7 +33,7 @@ const examSchema = new mongoose.Schema(
     },
 
     academicTerm: {
-      type: String,
+      type: Schema.Types.ObjectId,
       ref: "AcademicTerm",
       required: true,
     },
@@ -65,22 +65,22 @@ const examSchema = new mongoose.Schema(
     },
     questions: [
       {
-        type: String,
+        type: Schema.Types.ObjectId,
         ref: "Question",
       },
     ],
     classLevel: {
-      type: String,
+      type: Schema.Types.ObjectId,
       ref: "ClassLevel",
       required: true,
     },
     createdBy: {
-      type: String,
+      type: Schema.Types.ObjectId,
       ref: "Teacher",
       required: true,
     },
     academicYear: {
-      type: String,
+      type: Schema.Types.ObjectId,
       ref: "AcademicYear",
       required: true,
     },

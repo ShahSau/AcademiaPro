@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
 //questionSchema
 const questionSchema = new mongoose.Schema(
@@ -36,12 +36,13 @@ const questionSchema = new mongoose.Schema(
       default: false,
     },
     createdBy: {
-      type: String,
+      type: Schema.Types.ObjectId,
       ref: "Teacher",
       required: true,
     },
     examId: {
-      type: String,
+      type: Schema.Types.ObjectId,
+      ref: "Exam",
       required: true,
     },
   },

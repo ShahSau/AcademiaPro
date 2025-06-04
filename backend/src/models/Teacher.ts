@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
 const teacherSchema = new mongoose.Schema(
   {
@@ -20,7 +20,8 @@ const teacherSchema = new mongoose.Schema(
       default: Date.now,
     },
     teacherId: {
-      type: String,
+      type: String, // will be generated later
+      unique: true,
       required: true,
     },
     employedCurrently: {
@@ -36,11 +37,11 @@ const teacherSchema = new mongoose.Schema(
       default: "teacher",
     },
     subject: {
-      type: String,
+      type: Schema.Types.ObjectId,
       ref: "Subject",
     },
     program: {
-      type: String,
+      type: Schema.Types.ObjectId,
     },
     classLevel: {
       type: String,
@@ -50,12 +51,12 @@ const teacherSchema = new mongoose.Schema(
     },
     examsCreated: [
       {
-        type: String,
+        type: Schema.Types.ObjectId,
         ref: "Exam",
       },
     ],
     createdBy: {
-      type: String,
+      type: Schema.Types.ObjectId,
       ref: "Admin",
     },
     academicTerm: {

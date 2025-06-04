@@ -1,15 +1,15 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
 //exam result schema
 const examResultSchema = new mongoose.Schema(
   {
     student: {
-      type: String,
+      type: Schema.Types.ObjectId,
       ref: "Student",
       required: true,
     },
     exam: {
-      type: String,
+      type: Schema.Types.ObjectId,
       ref: "Exam",
       required: true,
     },
@@ -44,22 +44,21 @@ const examResultSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
-
     subject: {
-      type: String,
+      type: Schema.Types.ObjectId,
       ref: "Subject",
     },
     classLevel: {
-      type: String,
+      type: Schema.Types.ObjectId,
       ref: "ClassLevel",
     },
     academicTerm: {
-      type: String,
+      type: Schema.Types.ObjectId,
       ref: "AcademicTerm",
       required: true,
     },
     academicYear: {
-      type: String,
+      type: Schema.Types.ObjectId,
       ref: "AcademicYear",
       required: true,
     },

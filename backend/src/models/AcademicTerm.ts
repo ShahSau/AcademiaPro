@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
 const academicTermSchema = new mongoose.Schema(
   {
@@ -21,7 +21,7 @@ const academicTermSchema = new mongoose.Schema(
       default: "3 months",
     },
     createdBy: {
-      type: String,
+      type: Schema.Types.ObjectId,
       ref: "Admin",
       required: true,
     },
