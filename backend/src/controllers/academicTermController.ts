@@ -11,7 +11,7 @@ const createAcademicTerm = async (req: Request, res: Response) => {
     //check name exists
     const createAcademicTermFound = await AcademicTerm.findOne({ name });
     if (createAcademicTermFound) {
-      throw new Error("Academic terms= already exists");
+      throw new Error("Academic terms already exists");
     }
 
     const admin = await Admin.findOne({ token });
@@ -23,9 +23,10 @@ const createAcademicTerm = async (req: Request, res: Response) => {
       name,
       description,
       duration,
-      createdBy: admin.id,
+      createdBy: admin._id,
       id: uuidv4().replace(/-/g, "").slice(0, 14),
     });
+
     await academicTerm.save();
 
     res.status(201).json({
@@ -97,10 +98,16 @@ const updateAcademicTerms = async (req: Request, res: Response) => {
       throw new Error("Academic term not found");
     }
 
-    academicTerm.name = name;
-    academicTerm.description = description;
-    academicTerm.duration = duration;
-    academicTerm.createdBy = admin.id;
+    // Update only the fields that are provided
+    if (name) {
+      academicTerm.name = name;
+    }
+    if (description) {
+      academicTerm.description = description;
+    }
+    if (duration) {
+      academicTerm.duration = duration;
+    }
 
     await academicTerm.save();
 
