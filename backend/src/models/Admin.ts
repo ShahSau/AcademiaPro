@@ -14,7 +14,7 @@ const adminSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
-    }, //twilio expexts mobile number to be string
+    }, //twilio expects mobile number to be string
     password: {
       type: String,
       required: true,

@@ -2,11 +2,10 @@ import express from "express";
 import verifyToken from "../middlewares/verifyToken";
 import isAdmin from "../middlewares/isAdmin";
 import {
-  changeResultStatus,
-  deleteAdminController,
   loginAdminController,
   registerAdminController,
-  updateAdminController,
+  updateAdminPasswordController,
+  getAllAdminsController,
 } from "../controllers/adminController";
 // import advancedResults from "../../middlewares/advancedResults";
 
@@ -21,9 +20,9 @@ const adminRouter = express.Router();
 
 /**
  * @swagger
- * /api/v1/admins/register:
+ * /api/v1/admins/register/newAdmin:
  *   post:
- *     summary: Register a new admin
+ *     summary: Register a new admin by an existing admin.
  *     tags:
  *       - Admin
  *     security:
@@ -68,7 +67,7 @@ const adminRouter = express.Router();
  *         description: Error registering admin.
  */
 
-adminRouter.post("/register", verifyToken, isAdmin, registerAdminController);
+adminRouter.post("/register/newAdmin", verifyToken, isAdmin, registerAdminController);
 
 /**
  * @swagger
@@ -78,8 +77,6 @@ adminRouter.post("/register", verifyToken, isAdmin, registerAdminController);
  *     description: Authenticates an admin user with a token and login credentials.
  *     tags:
  *       - Admin
- *     security:
- *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -119,9 +116,9 @@ adminRouter.post("/login", loginAdminController);
 
 /**
  * @swagger
- * /api/v1/admins/{id}:
- *   delete:
- *     summary: Delete an admin
+ * /api/v1/admins:
+ *   get:
+ *     summary: Get all admins
  *     tags:
  *       - Admin
  *     security:
@@ -134,28 +131,19 @@ adminRouter.post("/login", loginAdminController);
  *           type: string
  *           format: JWT
  *         description: Token for authorization.
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *         description: The admin's ID.
  *     responses:
  *       200:
- *         description: Admin deleted successfully.
- *       400:
- *         description: Invalid request data.
+ *         description: Successfully retrieved all admins.
  *       500:
- *         description: Error deleting admin.
+ *         description: Error retrieving admins.
  */
-
-adminRouter.delete("/:id", verifyToken, isAdmin, deleteAdminController);
+adminRouter.get("/", verifyToken, isAdmin, getAllAdminsController);
 
 /**
  * @swagger
- * /api/v1/admins/update:
+ * /api/v1/admins/updatePassword:
  *   put:
- *     summary: Update an admin
+ *     summary: Update password of an admin
  *     tags:
  *       - Admin
  *     security:
@@ -175,21 +163,13 @@ adminRouter.delete("/:id", verifyToken, isAdmin, deleteAdminController);
  *           schema:
  *             type: object
  *             properties:
- *               name:
+ *               passwordNew:
  *                 type: string
- *                 description: The admin's name.
- *                 example: John Doe
- *               email:
+ *                 description: The admin's new password.
+ *                 example: Admin@123
+ *               passwordOld:
  *                 type: string
- *                 description: The admin's email.
- *                 example: admin@example.com
- *               mobile:
- *                 type: string
- *                 description: The admin's mobile number.
- *                 example: 12456
- *               password:
- *                 type: string
- *                 description: The admin's password.
+ *                 description: The admin's old password.
  *                 example: Admin@123
  *     responses:
  *       200:
@@ -200,39 +180,6 @@ adminRouter.delete("/:id", verifyToken, isAdmin, deleteAdminController);
  *         description: Error updating admin.
  */
 
-adminRouter.put("/update", verifyToken, isAdmin, updateAdminController);
-
-/**
- * @swagger
- * /api/v1/admins/publish/exam/{id}:
- *   put:
- *     summary: Publish exam result
- *     tags:
- *       - Admin
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: header
- *         name: token
- *         required: true
- *         schema:
- *           type: string
- *           format: JWT
- *         description: Token for authorization.
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *         description: The exam ID.
- *     responses:
- *       200:
- *         description: Exam result published successfully.
- *       400:
- *         description: Invalid request data.
- *       500:
- *         description: Error publishing exam result.
- */
-adminRouter.put("/publish/exam/:id", verifyToken, isAdmin, changeResultStatus);
+adminRouter.put("/updatePassword", verifyToken, isAdmin, updateAdminPasswordController);
 
 export default adminRouter;

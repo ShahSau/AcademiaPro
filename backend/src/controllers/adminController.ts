@@ -2,7 +2,6 @@ import type { Request, Response } from "express";
 import Admin from "../models/Admin";
 import bcrypt from "bcryptjs";
 import generateToken from "../utils/generateToken";
-import Exam from "../models/Exam";
 import generateUniqueId from "../utils/generateUniqueID";
 
 // Admin Registration
@@ -101,43 +100,25 @@ const loginAdminController = async (req: Request, res: Response) => {
   }
 };
 
-// Admin delete
-const deleteAdminController = async (req: Request, res: Response) => {
-  const id = req.params.id;
-  const token = req.headers.token;
-
+// get all admins
+const getAllAdminsController = async (req: Request, res: Response) => {
   try {
-    // Check if admin exists in the database
-    const adminExists = await Admin.findOne({ id });
-
-    if (!adminExists) {
-      return res
-        .status(400)
-        .json({ message: "Eamil dosenot exists", success: false });
-    }
-
-    if (adminExists.token !== token) {
-      return res.status(403).json({ message: "Unauthorized", success: false });
-    }
-
-    await Admin.deleteOne({
-      id,
-    });
-
-    res.status(200).json({ message: "Admin deleted", success: true });
+    const admins = await Admin.find({}).select("-password -token");
+    res.status(200).json({ message: "Admins fetched successfully", admins });
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Error deleting Admin", error, success: false });
+    res.status(500).json({
+      message: "Error fetching admins",
+      error: (error as Error).message,
+    });
   }
 };
 
 // Admin update
-const updateAdminController = async (req: Request, res: Response) => {
-  const { name, email, mobile, password } = req.body;
+const updateAdminPasswordController = async (req: Request, res: Response) => {
+  const { passwordNew, passwordOld } = req.body;
   const token = req.headers.token;
 
-  if (!name || !email || !mobile || !password) {
+  if (! passwordNew || !passwordOld) {
     return res
       .status(400)
       .json({ message: "All fields are required", success: false });
@@ -153,63 +134,34 @@ const updateAdminController = async (req: Request, res: Response) => {
         .json({ message: "Admin does not exists", success: false });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    // Check if password is correct
+    const isMatch = await bcrypt.compare(passwordOld, adminExists.password);
+    if (!isMatch) {
+      return res
+        .status(400)
+        .json({ message: "Invalid credentials", success: false });
+    }
+
+    const hashedPassword = await bcrypt.hash(passwordNew, 10);
 
     await Admin.updateOne(
       { token },
       {
-        name: name,
-        email: email,
-        mobile: mobile,
         password: hashedPassword,
       }
     );
 
-    res.status(200).json({ message: "Admin updated", success: true });
+    res.status(200).json({ message: "Admin's password is  updated", success: true });
   } catch (error) {
     res
       .status(500)
-      .json({ message: "Error updating Admin", error, success: false });
-  }
-};
-
-const changeResultStatus = async (req: Request, res: Response) => {
-  const id = req.params.id;
-
-  if (!id) {
-    return res.status(400).json({ message: "Exam ID is required" });
-  }
-
-  try {
-    const exam = await Exam.findOne({ id });
-
-    if (!exam) {
-      return res.status(400).json({ message: "Exam does not exists" });
-    }
-
-    await Exam.updateOne(
-      { id },
-      {
-        ...exam,
-        resultPublished: !exam.resultPublished,
-      }
-    );
-
-    res
-      .status(200)
-      .json({ message: "Exam results status updated successfully" });
-  } catch (error) {
-    res.status(500).json({
-      message: "Error changing exam result status",
-      error: (error as Error).message,
-    });
+      .json({ message: "Error updating Admin's password", error, success: false });
   }
 };
 
 export {
   registerAdminController,
   loginAdminController,
-  deleteAdminController,
-  updateAdminController,
-  changeResultStatus,
+  getAllAdminsController,
+  updateAdminPasswordController,
 };
