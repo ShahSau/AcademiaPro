@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import AcademicTerm from "../models/AcademicTerm";
 import Admin from "../models/Admin";
 import Exam from "../models/Exam";
@@ -105,7 +106,7 @@ const getStudentProfile = async (req: Request, res: Response) => {
       program: student?.program,
       dateAtmitted: student?.dateAdmitted,
       isSuspended: student?.isSuspended,
-      isExpeled: student?.isExpeled,
+      isExpeled: student?.isExpelled,
       studentId: student?.studentId,
       prefectName: student?.prefectName,
     };
@@ -267,7 +268,7 @@ const adminUpdateStudent = async (req: Request, res: Response) => {
       studentFound.isSuspended = Suspended;
     }
     if (Expeled !== undefined) {
-      studentFound.isExpeled = Expeled;
+      studentFound.isExpelled = Expeled;
     }
 
     if (classLevels) {
@@ -332,7 +333,7 @@ const writeExam = async (req: Request, res: Response) => {
     }
 
     //check if student is suspende/withdrawn
-    if (studentFound.isExpeled || studentFound.isSuspended) {
+    if (studentFound.isExpelled || studentFound.isSuspended) {
       throw new Error("You are suspended/withdrawn, you can't take this exam");
     }
 
@@ -414,7 +415,7 @@ const writeExam = async (req: Request, res: Response) => {
         status === "Pass" &&
         studentFound?.currentClassLevel === "Level 100"
       ) {
-        studentFound.classLevels.push("Level 200");
+        studentFound.classLevels.push(new mongoose.Types.ObjectId("Level 200"));
         studentFound.currentClassLevel = "Level 200";
         await studentFound.save();
       }
@@ -425,7 +426,7 @@ const writeExam = async (req: Request, res: Response) => {
         status === "Pass" &&
         studentFound?.currentClassLevel === "Level 200"
       ) {
-        studentFound.classLevels.push("Level 300");
+        studentFound.classLevels.push(new mongoose.Types.ObjectId("Level 300"));
         studentFound.currentClassLevel = "Level 300";
         await studentFound.save();
       }
@@ -436,7 +437,7 @@ const writeExam = async (req: Request, res: Response) => {
         status === "Pass" &&
         studentFound?.currentClassLevel === "Level 300"
       ) {
-        studentFound.classLevels.push("Level 400");
+        studentFound.classLevels.push(new mongoose.Types.ObjectId("Level 400"));
         studentFound.currentClassLevel = "Level 400";
         await studentFound.save();
       }

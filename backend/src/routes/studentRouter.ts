@@ -10,7 +10,7 @@ import {
   getAllStudentsByAdmin,
   getStudentByAdmin,
   updateStudentProfile,
-  writeExam,
+  //writeExam,
   adminUpdateStudent,
 } from "../controllers/studentsController";
 

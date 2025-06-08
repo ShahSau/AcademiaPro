@@ -35,7 +35,7 @@ const createYearGroup = async (req: Request, res: Response) => {
       id: uuidv4().replace(/-/g, "").slice(0, 24),
     });
 
-    admin.yearGroups.push(yearGroup);
+    admin.yearGroups.push(yearGroup.id);
 
     await admin.save();
 
@@ -119,12 +119,14 @@ const updateYearGroup = async (req: Request, res: Response) => {
     throw new Error("Year Group not found");
   }
 
-  const groups = admin.yearGroups.map((group) => {
-    if (group.id !== req.params.id) {
-      return group;
-    }
-  });
-  groups.push(yearGroup);
+  const groups = admin.yearGroups
+    .map((group) => {
+      if (group.id.toString() !== req.params.id) {
+        return group;
+      }
+    })
+    .filter((group): group is typeof admin.yearGroups[number] => group !== undefined);
+  groups.push(yearGroup.id);
 
   admin.yearGroups = groups;
 

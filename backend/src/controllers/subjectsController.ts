@@ -33,7 +33,7 @@ const createSubject = async (req: Request, res: Response) => {
       programId: programFound.id,
     });
 
-    programFound.subjects.push(subjectCreated);
+    programFound.subjects.push(subjectCreated.id);
 
     await programFound.save();
     res.status(201).json({
@@ -103,16 +103,10 @@ const updateSubject = async (req: Request, res: Response) => {
     }
 
     const subjectProgram = programFound.subjects.filter(
-      (subject) => subject.id !== req.params.id
+      (subjectId) => subjectId.toString() !== req.params.id
     );
 
-    subjectProgram.push({
-      name,
-      description,
-      academicTerm,
-      duration,
-      createdBy: admin.id,
-    });
+    subjectProgram.push(subjectFound.id);
 
     await Program.findOneAndUpdate(
       { id: subjectFound.programId },

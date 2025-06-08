@@ -4,6 +4,7 @@ import Teacher from "../models/Teacher";
 import generateToken from "../utils/generateToken";
 import { hashPassword, isPassMatched } from "../utils/helpers";
 import { v4 as uuidv4 } from "uuid";
+import mongoose from "mongoose";
 
 const adminRegisterTeacher = async (req: Request, res: Response) => {
   try {
@@ -31,7 +32,7 @@ const adminRegisterTeacher = async (req: Request, res: Response) => {
       teacherId: uuidv4().replace(/-/g, "").slice(0, 24),
     });
 
-    adminFound.teachers.push(teacherCreated.teacherId);
+    adminFound.teachers.push(new mongoose.Types.ObjectId(teacherCreated.teacherId));
     await adminFound.save();
 
     res.status(201).json({

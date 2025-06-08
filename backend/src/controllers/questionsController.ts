@@ -3,6 +3,7 @@ import Question from "../models/Questions";
 import type { Request, Response } from "express";
 import Teacher from "../models/Teacher";
 import { v4 as uuidv4 } from "uuid";
+import mongoose from "mongoose";
 const createQuestion = async (req: Request, res: Response) => {
   try {
     const token = req.headers.token;
@@ -37,7 +38,7 @@ const createQuestion = async (req: Request, res: Response) => {
       examId: examFound.id,
     });
 
-    examFound.questions.push(questionId);
+    examFound.questions.push(new mongoose.Types.ObjectId(questionId));
 
     await examFound.save();
 
