@@ -11,12 +11,13 @@ const yearGroupSchema = new mongoose.Schema(
       ref: "Admin",
       required: true,
     },
-    academicYear: {
-      type: Schema.Types.ObjectId,
-      ref: "AcademicYear",
-      required: true,
-    },
-    id: {
+    academicYear: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "AcademicYear",
+      },
+    ],
+    yearGroupId: {
       type: String,
       required: true,
     },

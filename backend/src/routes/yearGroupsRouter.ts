@@ -2,6 +2,7 @@ import express from "express";
 import isAdmin from "../middlewares/isAdmin";
 import verifyToken from "../middlewares/verifyToken";
 import {
+  addAcademicYearToYearGroup,
   createYearGroup,
   deleteYearGroup,
   getYearGroup,
@@ -16,7 +17,7 @@ const yearGroupRouter = express.Router();
  * /api/v1/year-groups:
  *   post:
  *     summary: Create a new year group
- *     tags: 
+ *     tags:
  *      - Year Groups
  *     security:
  *       - bearerAuth: []
@@ -38,12 +39,8 @@ const yearGroupRouter = express.Router();
  *               name:
  *                 type: string
  *                 required: true
- *               academicYear:
- *                 type: string
- *                 required: true
  *             example:
  *               name: Year 1
- *               academicYear: 2021/2022
  *     responses:
  *       201:
  *         description: Year group created successfully
@@ -61,7 +58,7 @@ yearGroupRouter.post("/", verifyToken, isAdmin, createYearGroup);
  * /api/v1/year-groups:
  *   get:
  *     summary: Get all year groups
- *     tags: 
+ *     tags:
  *      - Year Groups
  *     security:
  *       - bearerAuth: []
@@ -90,7 +87,7 @@ yearGroupRouter.get("/", verifyToken, isAdmin, getYearGroups);
  * /api/v1/year-groups/{id}:
  *   get:
  *     summary: Get a year group by ID
- *     tags: 
+ *     tags:
  *      - Year Groups
  *     security:
  *       - bearerAuth: []
@@ -125,7 +122,7 @@ yearGroupRouter.get("/:id", verifyToken, isAdmin, getYearGroup);
  * /api/v1/year-groups/{id}:
  *   put:
  *     summary: Update a year group by ID
- *     tags: 
+ *     tags:
  *      - Year Groups
  *     security:
  *       - bearerAuth: []
@@ -153,12 +150,8 @@ yearGroupRouter.get("/:id", verifyToken, isAdmin, getYearGroup);
  *               name:
  *                 type: string
  *                 required: true
- *               academicYear:
- *                 type: string
- *                 required: true
  *             example:
  *               name: Year 1
- *               academicYear: 2021/2022
  *     responses:
  *       201:
  *         description: Year group updated successfully
@@ -176,7 +169,7 @@ yearGroupRouter.put("/:id", verifyToken, isAdmin, updateYearGroup);
  * /api/v1/year-groups/{id}:
  *   delete:
  *     summary: Delete a year group by ID
- *     tags: 
+ *     tags:
  *      - Year Groups
  *     security:
  *       - bearerAuth: []
@@ -205,5 +198,56 @@ yearGroupRouter.put("/:id", verifyToken, isAdmin, updateYearGroup);
  *         description: Server error
  */
 yearGroupRouter.delete("/:id", verifyToken, isAdmin, deleteYearGroup);
+
+/**
+ * @swagger
+ * /api/v1/year-groups/{id}/academic-year:
+ *   post:
+ *     summary: Add academic year to a year group
+ *     tags:
+ *      - Year Groups
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Academic year id
+ *       - in: header
+ *         name: token
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: JWT
+ *         description: Token for authorization.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               academicYearIds:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                 description: List of academicyear IDs to be added to the academic year
+ *                 example: ["academicyearId1", "academicyearId2"]
+ *     responses:
+ *       200:
+ *         description: academicyear is added to year group successfully
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Internal server error
+ */
+yearGroupRouter.post(
+  "/:id/academic-year",
+  verifyToken,
+  isAdmin,
+  addAcademicYearToYearGroup
+);
 
 export default yearGroupRouter;
