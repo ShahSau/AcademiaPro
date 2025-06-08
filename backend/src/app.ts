@@ -16,7 +16,7 @@ import teacherRouter from "./routes/teacherRouter";
 import yearGroupRouter from "./routes/yearGroupsRouter";
 import { globalErrHandler, notFoundErr } from "./middlewares/globalErrHandler";
 import noticeRouter from "./routes/noticeRouter";
-
+import complainRouter from "./routes/complainRouter";
 import attendanceRouter from "./routes/attendenceRouter";
 
 
@@ -57,7 +57,7 @@ app.use("/api/v1/exams", examRouter);
 app.use("/api/v1/students", studentRouter);
 app.use("/api/v1/questions", questionsRouter);
 app.use("/api/v1/notices", noticeRouter);
-
+app.use("/api/v1/complains",complainRouter);
 app.use("/api/v1/attendance", attendanceRouter);
 
 
