@@ -18,7 +18,7 @@ import { globalErrHandler, notFoundErr } from "./middlewares/globalErrHandler";
 import noticeRouter from "./routes/noticeRouter";
 import complainRouter from "./routes/complainRouter";
 import attendanceRouter from "./routes/attendenceRouter";
-
+import eventsRouter from "./routes/eventsRouter";
 
 const app = express();
 app.use(express.json());
@@ -59,7 +59,7 @@ app.use("/api/v1/questions", questionsRouter);
 app.use("/api/v1/notices", noticeRouter);
 app.use("/api/v1/complains",complainRouter);
 app.use("/api/v1/attendance", attendanceRouter);
-
+app.use("/api/v1/events", eventsRouter);
 
 //Error middlewares
 app.use(notFoundErr);
