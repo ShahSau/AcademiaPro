@@ -17,6 +17,9 @@ import yearGroupRouter from "./routes/yearGroupsRouter";
 import { globalErrHandler, notFoundErr } from "./middlewares/globalErrHandler";
 import noticeRouter from "./routes/noticeRouter";
 
+import attendanceRouter from "./routes/attendenceRouter";
+
+
 const app = express();
 app.use(express.json());
 
@@ -54,6 +57,9 @@ app.use("/api/v1/exams", examRouter);
 app.use("/api/v1/students", studentRouter);
 app.use("/api/v1/questions", questionsRouter);
 app.use("/api/v1/notices", noticeRouter);
+
+app.use("/api/v1/attendance", attendanceRouter);
+
 
 //Error middlewares
 app.use(notFoundErr);
