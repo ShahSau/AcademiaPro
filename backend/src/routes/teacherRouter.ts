@@ -19,7 +19,7 @@ const teachersRouter = express.Router();
  * /api/v1/teachers/admin/register:
  *   post:
  *     summary: Register a teacher
- *     description: Register a teacher
+ *     description: Register a teacher by admin
  *     tags:
  *      - Teachers
  *     security:

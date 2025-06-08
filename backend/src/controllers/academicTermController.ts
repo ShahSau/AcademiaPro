@@ -24,7 +24,7 @@ const createAcademicTerm = async (req: Request, res: Response) => {
       description,
       duration,
       createdBy: admin._id,
-      id: uuidv4().replace(/-/g, "").slice(0, 14),
+      termId: uuidv4().replace(/-/g, "").slice(0, 14),
     });
 
     await academicTerm.save();
@@ -63,7 +63,7 @@ const getAcademicTerms = async (req: Request, res: Response) => {
 // get academic term by id
 const getAcademicTerm = async (req: Request, res: Response) => {
   try {
-    const academicTerm = await AcademicTerm.findOne({ id: req.params.id });
+    const academicTerm = await AcademicTerm.findOne({ _id: req.params.id });
 
     if (!academicTerm) {
       throw new Error("Academic term not found");

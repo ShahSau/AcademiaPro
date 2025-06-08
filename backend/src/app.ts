@@ -48,8 +48,8 @@ app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
 app.use("/api/v1/admins", adminRouter);
 app.use("/api/v1/teachers", teacherRouter);
 app.use("/api/v1/academic-terms", academicTermRouter);
-
 app.use("/api/v1/academic-years", academicYearRouter);
+
 app.use("/api/v1/class-levels", classLevelRouter);
 app.use("/api/v1/programs", programRouter);
 app.use("/api/v1/subjects", subjectRouter);

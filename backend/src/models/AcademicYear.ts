@@ -35,12 +35,13 @@ const academicYearSchema = new mongoose.Schema(
         ref: "Teacher",
       },
     ],
-    id: {
+    yearId: {
       type: String,
       required: true,
       unique: true,
     },
   },
+
   {
     timestamps: true,
   }

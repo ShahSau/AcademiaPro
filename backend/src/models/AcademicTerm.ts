@@ -10,10 +10,9 @@ const academicTermSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    id: {
+    termId: {
       type: String,
       required: true,
-      unique: true,
     },
     duration: {
       type: String,
