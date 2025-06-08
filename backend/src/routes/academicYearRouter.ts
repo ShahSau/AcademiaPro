@@ -17,7 +17,8 @@ const academicYearRouter = express.Router();
  * /api/v1/academic-years:
  *   post:
  *     summary: Create a new academic year
- *     tags: [Admin]
+ *     tags: 
+ *      - Academic Year
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -64,7 +65,8 @@ academicYearRouter.post("/", verifyToken, isAdmin, createAcademicYear);
  * /api/v1/academic-years:
  *   get:
  *     summary: Get all academic years
- *     tags: [Admin]
+ *     tags: 
+ *      - Academic Year
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -90,7 +92,8 @@ academicYearRouter.get("/", verifyToken, isAdmin, getAcademicYears);
  * /api/v1/academic-years/{id}:
  *   get:
  *     summary: Get a single academic year
- *     tags: [Admin]
+ *     tags: 
+ *      - Academic Year
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -122,7 +125,8 @@ academicYearRouter.get("/:id", verifyToken, isAdmin, getAcademicYear);
  * /api/v1/academic-years/{id}:
  *   put:
  *     summary: Update an academic year
- *     tags: [Admin]
+ *     tags: 
+ *      - Academic Year
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -175,7 +179,8 @@ academicYearRouter.put("/:id", verifyToken, isAdmin, updateAcademicYear);
  * /api/v1/academic-years/{id}:
  *   delete:
  *     summary: Delete an academic year
- *     tags: [Admin]
+ *     tags: 
+ *      - Academic Year
  *     security:
  *       - bearerAuth: []
  *     parameters:

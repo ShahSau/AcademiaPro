@@ -16,7 +16,8 @@ const classLevelRouter = express.Router();
  * /api/v1/class-levels:
  *   post:
  *     summary: Create a new class level
- *     tags: [Admin]
+ *     tags: 
+ *      - Class Level
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -59,7 +60,8 @@ classLevelRouter.post("/", verifyToken, isAdmin, createClassLevel);
  * /api/v1/class-levels:
  *   get:
  *     summary: Get all class levels
- *     tags: [Admin]
+ *     tags: 
+ *      - Class Level
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -85,7 +87,8 @@ classLevelRouter.get("/", verifyToken, isAdmin, getClassLevels);
  * /api/v1/class-levels/{id}:
  *   get:
  *     summary: Get a class level by id
- *     tags: [Admin]
+ *     tags: 
+ *      - Class Level
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -117,7 +120,8 @@ classLevelRouter.get("/:id", verifyToken, isAdmin, getClassLevel);
  * /api/v1/class-levels/{id}:
  *   put:
  *     summary: Update a class level
- *     tags: [Admin]
+ *     tags: 
+ *      - Class Level
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -166,7 +170,8 @@ classLevelRouter.put("/:id", verifyToken, isAdmin, updateClassLevel);
  * /api/v1/class-levels/{id}:
  *   delete:
  *     summary: Delete a class level
- *     tags: [Admin]
+ *     tags: 
+ *      - Class Level
  *     security:
  *       - bearerAuth: []
  *     parameters:

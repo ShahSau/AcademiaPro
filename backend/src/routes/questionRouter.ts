@@ -16,8 +16,8 @@ const questionsRouter = express.Router();
  * /api/v1/questions:
  *   get:
  *     summary: Get all questions
- *     tags:
- *       - Admin
+ *     tags: 
+ *      - Questions
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -45,8 +45,8 @@ questionsRouter.get("/", verifyToken, isAdmin, getQuestions);
  * /api/v1/questions/{id}:
  *   get:
  *     summary: Get a question by id
- *     tags:
- *       - Admin
+ *     tags: 
+ *      - Questions
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -80,8 +80,8 @@ questionsRouter.get("/:id", verifyToken, isAdmin, getQuestion);
  * /api/v1/questions/{examId}:
  *   post:
  *     summary: Create a question
- *     tags:
- *       - Teachers
+ *     tags: 
+ *      - Questions
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -134,8 +134,8 @@ questionsRouter.post("/:examId", verifyToken, isTeacher, createQuestion);
  * /api/v1/questions/{id}:
  *   put:
  *     summary: Update a question
- *     tags:
- *       - Teachers
+ *     tags: 
+ *      - Questions
  *     security:
  *       - bearerAuth: []
  *     parameters:

@@ -20,8 +20,8 @@ const teachersRouter = express.Router();
  *   post:
  *     summary: Register a teacher
  *     description: Register a teacher
- *     tags:
- *       - Admin
+ *     tags: 
+ *      - Teachers
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -74,8 +74,8 @@ teachersRouter.post(
  *   post:
  *     summary: Login a teacher
  *     description: Login a teacher
- *     tags:
- *       - Teachers
+ *     tags: 
+ *      - Teachers
  *     requestBody:
  *       required: true
  *       content:
@@ -109,8 +109,8 @@ teachersRouter.post("/login", loginTeacher);
  *   get:
  *     summary: Get teacher profile
  *     description: Get teacher profile
- *     tags:
- *       - Teachers
+ *     tags: 
+ *      - Teachers
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -137,8 +137,8 @@ teachersRouter.get("/profile", verifyToken, isTeacher, getTeacherProfile);
  *   get:
  *     summary: Get teacher by admin
  *     description: Get teacher by admin
- *     tags:
- *       - Admin
+ *     tags: 
+ *      - Teachers
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -176,8 +176,8 @@ teachersRouter.get(
  *   put:
  *     summary: Update teacher profile
  *     description: Update teacher profile
- *     tags:
- *       - Teachers
+ *     tags: 
+ *      - Teachers
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -236,8 +236,8 @@ teachersRouter.put(
  *   put:
  *     summary: Update teacher by admin
  *     description: Update teacher by admin
- *     tags:
- *       - Admin
+ *     tags: 
+ *      - Teachers
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -309,8 +309,8 @@ teachersRouter.put(
  *   get:
  *     summary: Get all teachers by admin
  *     description: Get all teachers by admin
- *     tags:
- *       - Admin
+ *     tags: 
+ *      - Teachers
  *     security:
  *       - bearerAuth: []
  *     parameters:

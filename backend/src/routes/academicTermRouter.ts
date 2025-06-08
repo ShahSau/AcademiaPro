@@ -17,7 +17,7 @@ const academicTermRouter = express.Router();
  *   post:
  *     summary: Create a new academic term
  *     tags:
- *      - Admin
+ *      - Academic Term
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -65,7 +65,7 @@ academicTermRouter.post("/", verifyToken, isAdmin, createAcademicTerm);
  *   get:
  *     summary: Get all academic terms
  *     tags:
- *      - Admin
+ *      - Academic Term
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -90,7 +90,7 @@ academicTermRouter.get("/", verifyToken, isAdmin, getAcademicTerms);
  *   get:
  *     summary: Get academic term by ID
  *     tags:
- *      - Admin
+ *      - Academic Term
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -123,7 +123,7 @@ academicTermRouter.get("/:id", verifyToken, isAdmin, getAcademicTerm);
  *   put:
  *     summary: Update academic term by ID
  *     tags:
- *      - Admin
+ *      - Academic Term
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -175,7 +175,7 @@ academicTermRouter.put("/:id", verifyToken, isAdmin, updateAcademicTerms);
  *   delete:
  *     summary: Delete academic term by ID
  *     tags:
- *      - Admin
+ *      - Academic Term
  *     security:
  *       - bearerAuth: []
  *     parameters:

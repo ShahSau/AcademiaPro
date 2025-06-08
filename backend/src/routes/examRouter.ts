@@ -15,8 +15,8 @@ const examRouter = express.Router();
  * /api/v1/exams:
  *   get:
  *     summary: Get all exams
- *     tags:
- *       - Teachers
+ *     tags: 
+ *      - Exams
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -42,8 +42,8 @@ examRouter.get("/", verifyToken, isTeacher, getExams);
  * /api/v1/exams:
  *   post:
  *     summary: Create a new exam
- *     tags:
- *      - Teachers
+ *     tags: 
+ *      - Exams
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -136,8 +136,8 @@ examRouter.post("/", verifyToken, isTeacher, createExam);
  * /api/v1/exams/{id}:
  *   get:
  *     summary: Get exam by ID
- *     tags:
- *      - Teachers
+ *     tags: 
+ *      - Exams
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -171,8 +171,8 @@ examRouter.get("/:id", verifyToken, isTeacher, getExam);
  * /api/v1/exams/{id}:
  *   put:
  *     summary: Update exam by ID
- *     tags:
- *     - Teachers
+ *     tags: 
+ *      - Exams
  *     security:
  *       - bearerAuth: []
  *     parameters:

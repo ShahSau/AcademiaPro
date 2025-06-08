@@ -16,8 +16,8 @@ const programRouter = express.Router();
  * @swagger
  * /api/v1/programs:
  *   post:
- *     tags:
- *       - Admin
+ *     tags: 
+ *      - Programs
  *     summary: Create a new program
  *     description: Only admins can create programs
  *     security:
@@ -65,8 +65,8 @@ programRouter.post("/", verifyToken, isAdmin, createProgram);
  * @swagger
  * /api/v1/programs:
  *  get:
- *    tags:
- *      - Admin
+ *     tags: 
+ *      - Programs
  *    summary: Get all programs
  *    description: Only admins can fetch all programs
  *    security:
@@ -93,8 +93,8 @@ programRouter.get("/", verifyToken, isAdmin, getPrograms);
  * @swagger
  * /api/v1/programs/{id}:
  *   get:
- *     tags:
- *       - Admin
+ *     tags: 
+ *      - Programs
  *     summary: Get a program
  *     description: Only admins can get a program
  *     security:
@@ -131,8 +131,8 @@ programRouter.get("/:id", verifyToken, isAdmin, getProgram);
  * @swagger
  * /api/v1/programs/{id}:
  *   put:
- *     tags:
- *       - Admin
+ *     tags: 
+ *      - Programs
  *     summary: Update a program
  *     description: Only admins can update a program
  *     security:
@@ -190,8 +190,8 @@ programRouter.put("/:id", verifyToken, isAdmin, updateProgram);
  * @swagger
  * /api/v1/programs/{id}:
  *   delete:
- *     tags:
- *       - Admin
+ *     tags: 
+ *      - Programs
  *     summary: Delete a program
  *     description: Only admins can delete a program
  *     security:

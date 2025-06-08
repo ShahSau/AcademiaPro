@@ -22,8 +22,8 @@ const studentRouter = express.Router();
  *   post:
  *     summary: Register a student by admin
  *     description: Register a student by admin
- *     tags:
- *       - Admin
+ *     tags: 
+ *      - Students
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -74,8 +74,8 @@ studentRouter.post(
  *   post:
  *     summary: Login a student
  *     description: Login a student
- *     tags:
- *       - Students
+ *     tags: 
+ *      - Students
  *     requestBody:
  *       required: true
  *       content:
@@ -107,8 +107,8 @@ studentRouter.post("/login", loginStudent);
  *   get:
  *     summary: Get student profile
  *     description: Get student profile
- *     tags:
- *       - Students
+ *     tags: 
+ *      - Students
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -135,8 +135,8 @@ studentRouter.get("/profile", verifyToken, isStudent, getStudentProfile);
  *   get:
  *     summary: Get Student by admin
  *     description: Get Student by admin
- *     tags:
- *       - Admin
+ *     tags: 
+ *      - Students
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -169,8 +169,8 @@ studentRouter.get("/:studentID/admin", verifyToken, isAdmin, getStudentByAdmin);
  *   put:
  *     summary: Update teacher by admin
  *     description: Update teacher by admin
- *     tags:
- *       - Students
+ *     tags: 
+ *      - Students
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -220,8 +220,8 @@ studentRouter.put("/update", verifyToken, isStudent, updateStudentProfile);
  *   put:
  *     summary: Update student by admin
  *     description: Update student by admin
- *     tags:
- *       - Admin
+ *     tags: 
+ *      - Students
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -292,8 +292,8 @@ studentRouter.put(
  *   get:
  *     summary: Get all students by admin
  *     description: Get all students by admin
- *     tags:
- *       - Admin
+ *     tags: 
+ *      - Students
  *     security:
  *       - bearerAuth: []
  *     parameters:

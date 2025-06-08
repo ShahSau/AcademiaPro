@@ -58,7 +58,7 @@ complainRouter.post("/", verifyToken, isAdmin, createComplain);
  *   get:
  *     summary: Get all complains
 *     tags:
- *      - Admin
+ *      - Complain
  *     security:
  *       - bearerAuth: []
  *     parameters:
