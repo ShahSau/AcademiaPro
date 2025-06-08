@@ -3,7 +3,6 @@ import type { Request, Response } from "express";
 import { v4 as uuidv4 } from "uuid";
 import { Types } from "mongoose";
 import Admin from "../models/Admin";
-import Teacher from "../models/Teacher";
 
 // Create a new event
 const createEvent = async (req: Request, res: Response) => {

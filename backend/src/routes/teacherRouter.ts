@@ -20,7 +20,7 @@ const teachersRouter = express.Router();
  *   post:
  *     summary: Register a teacher
  *     description: Register a teacher
- *     tags: 
+ *     tags:
  *      - Teachers
  *     security:
  *       - bearerAuth: []
@@ -51,6 +51,10 @@ const teachersRouter = express.Router();
  *                 type: string
  *                 description: Password of the teacher
  *                 example: password
+ *               dateEmployed:
+ *                type: date
+ *                description: Date when the teacher was employed
+ *                example: 2023-01-01
  *     responses:
  *       200:
  *         description: A successful response
@@ -74,7 +78,7 @@ teachersRouter.post(
  *   post:
  *     summary: Login a teacher
  *     description: Login a teacher
- *     tags: 
+ *     tags:
  *      - Teachers
  *     requestBody:
  *       required: true
@@ -107,9 +111,9 @@ teachersRouter.post("/login", loginTeacher);
  * @swagger
  * /api/v1/teachers/profile:
  *   get:
- *     summary: Get teacher profile
- *     description: Get teacher profile
- *     tags: 
+ *     summary: Get your profile
+ *     description: Get your profile as a teacher
+ *     tags:
  *      - Teachers
  *     security:
  *       - bearerAuth: []
@@ -137,7 +141,7 @@ teachersRouter.get("/profile", verifyToken, isTeacher, getTeacherProfile);
  *   get:
  *     summary: Get teacher by admin
  *     description: Get teacher by admin
- *     tags: 
+ *     tags:
  *      - Teachers
  *     security:
  *       - bearerAuth: []
@@ -174,9 +178,9 @@ teachersRouter.get(
  * @swagger
  * /api/v1/teachers/{teacherID}/update:
  *   put:
- *     summary: Update teacher profile
- *     description: Update teacher profile
- *     tags: 
+ *     summary: Update teacher password
+ *     description: Update teacher  password
+ *     tags:
  *      - Teachers
  *     security:
  *       - bearerAuth: []
@@ -201,15 +205,11 @@ teachersRouter.get(
  *           schema:
  *             type: object
  *             properties:
- *               name:
+ *               passwordNew:
  *                 type: string
- *                 description: Name of the teacher
- *                 example: John Doe
- *               email:
- *                 type: string
- *                 description: Email of the teacher
- *                 example: john.doe@email.com
- *               password:
+ *                 description: Password of the teacher
+ *                 example: password
+ *               passwordOld:
  *                 type: string
  *                 description: Password of the teacher
  *                 example: password
@@ -236,7 +236,7 @@ teachersRouter.put(
  *   put:
  *     summary: Update teacher by admin
  *     description: Update teacher by admin
- *     tags: 
+ *     tags:
  *      - Teachers
  *     security:
  *       - bearerAuth: []
@@ -309,7 +309,7 @@ teachersRouter.put(
  *   get:
  *     summary: Get all teachers by admin
  *     description: Get all teachers by admin
- *     tags: 
+ *     tags:
  *      - Teachers
  *     security:
  *       - bearerAuth: []

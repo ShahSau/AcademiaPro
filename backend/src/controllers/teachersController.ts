@@ -6,6 +6,7 @@ import { hashPassword, isPassMatched } from "../utils/helpers";
 import { v4 as uuidv4 } from "uuid";
 import mongoose from "mongoose";
 
+// Admin registers a teacher
 const adminRegisterTeacher = async (req: Request, res: Response) => {
   try {
     const { name, email, dateEmployed, password } = req.body;
@@ -30,9 +31,12 @@ const adminRegisterTeacher = async (req: Request, res: Response) => {
       dateEmployed,
       password: hashedPassword,
       teacherId: uuidv4().replace(/-/g, "").slice(0, 24),
+      createdBy: adminFound._id,
     });
 
-    adminFound.teachers.push(new mongoose.Types.ObjectId(teacherCreated.teacherId));
+    adminFound.teachers.push(
+      new mongoose.Types.ObjectId(teacherCreated.teacherId)
+    );
     await adminFound.save();
 
     res.status(201).json({
@@ -48,6 +52,7 @@ const adminRegisterTeacher = async (req: Request, res: Response) => {
   }
 };
 
+// Teacher login
 const loginTeacher = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
@@ -69,13 +74,14 @@ const loginTeacher = async (req: Request, res: Response) => {
     await teacher.save();
 
     res.status(200).json({
-      message: "Admin logged in successfully",
+      message: "Teacher logged in successfully",
       success: true,
       data: {
         name: teacher.name,
         email: teacher.email,
         token: teacher.token,
         id: teacher.id,
+        teacherId: teacher.teacherId,
       },
     });
   } catch (error) {
@@ -86,6 +92,7 @@ const loginTeacher = async (req: Request, res: Response) => {
   }
 };
 
+// Get all teachers for admin with pagination
 const getAllTeachersAdmin = async (req: Request, res: Response) => {
   try {
     const page = parseInt(req.query.page as string) || 1;
@@ -113,6 +120,7 @@ const getAllTeachersAdmin = async (req: Request, res: Response) => {
   }
 };
 
+// Get a specific teacher by ID for admin
 const getTeacherByAdmin = async (req: Request, res: Response) => {
   try {
     const teacher = await Teacher.findOne({ teacherId: req.params.teacherID });
@@ -132,6 +140,7 @@ const getTeacherByAdmin = async (req: Request, res: Response) => {
   }
 };
 
+// Get your own teacher profile
 const getTeacherProfile = async (req: Request, res: Response) => {
   try {
     const teacher = await Teacher.findOne({ token: req.headers.token }).select(
@@ -153,9 +162,10 @@ const getTeacherProfile = async (req: Request, res: Response) => {
   }
 };
 
+// Update your own teacher profile
 const teacherUpdateProfile = async (req: Request, res: Response) => {
   try {
-    const { email, name, password } = req.body;
+    const { passwordNew, passwordOld } = req.body;
 
     const teacher = await Teacher.findOne({ token: req.headers.token });
 
@@ -167,44 +177,32 @@ const teacherUpdateProfile = async (req: Request, res: Response) => {
       throw new Error("You are not authorized to perform this action");
     }
 
-    if (password) {
-      //update
-      const teacher = await Teacher.findOneAndUpdate(
-        { teacherId: req.params.teacherID },
-        {
-          email,
-          password: await hashPassword(password),
-          name,
-        },
-        {
-          new: true,
-          runValidators: true,
-        }
-      );
-      res.status(200).json({
-        status: "success",
-        data: teacher,
-        message: "Teacher updated successfully",
-      });
-    } else {
-      //update
-      const teacher = await Teacher.findOneAndUpdate(
-        { teacherId: req.params.teacherID },
-        {
-          email,
-          name,
-        },
-        {
-          new: true,
-          runValidators: true,
-        }
-      );
-      res.status(200).json({
-        status: "success",
-        data: teacher,
-        message: "Teacher updated successfully",
+    if (teacher.isSuspended) {
+      res.status(403).json({
+        status: "error",
+        message: "Teacher is suspended, cannot update profile",
       });
     }
+
+    if (!passwordNew || !passwordOld) {
+      throw new Error("Please provide both old and new passwords");
+    }
+    const isMatched = await isPassMatched(passwordOld, teacher.password);
+    if (!isMatched) {
+      throw new Error("Old password is incorrect");
+    }
+    if (passwordNew === passwordOld) {
+      throw new Error("New password cannot be the same as old password");
+    }
+
+    const hashedPassword = await hashPassword(passwordNew);
+    teacher.password = hashedPassword;
+    await teacher.save();
+    res.status(200).json({
+      status: "success",
+      data: teacher,
+      message: "Teacher updated successfully",
+    });
   } catch (error) {
     res.status(400).json({
       status: "error",
@@ -213,6 +211,7 @@ const teacherUpdateProfile = async (req: Request, res: Response) => {
   }
 };
 
+// Admin updates a teacher's details
 const adminUpdateTeacher = async (req: Request, res: Response) => {
   try {
     const { program, classLevel, academicYear, subject, suspend, employed } =

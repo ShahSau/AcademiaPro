@@ -20,7 +20,7 @@ const teacherSchema = new mongoose.Schema(
       default: Date.now,
     },
     teacherId: {
-      type: String, // will be generated later
+      type: String,
       unique: true,
       required: true,
     },
@@ -42,13 +42,18 @@ const teacherSchema = new mongoose.Schema(
     },
     program: {
       type: Schema.Types.ObjectId,
+      ref: "Program",
     },
     classLevel: {
-      type: String,
+      type: Schema.Types.ObjectId,
+      ref: "ClassLevel",
     },
-    academicYear: {
-      type: String,
-    },
+    academicYear: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "AcademicYear",
+      },
+    ],
     examsCreated: [
       {
         type: Schema.Types.ObjectId,
@@ -59,9 +64,12 @@ const teacherSchema = new mongoose.Schema(
       type: Schema.Types.ObjectId,
       ref: "Admin",
     },
-    academicTerm: {
-      type: String,
-    },
+    academicTerm: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "AcademicTerm",
+      },
+    ],
     token: {
       type: String,
     },
