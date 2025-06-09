@@ -16,7 +16,7 @@ const ProgramSchema = new mongoose.Schema(
       default: "4 years",
     },
     code: {
-      type: String, // Code will be set dynamically
+      type: String,
       required: true,
     },
     createdBy: {
@@ -44,7 +44,7 @@ const ProgramSchema = new mongoose.Schema(
         default: [],
       },
     ],
-    id: {
+    programId: {
       type: String,
       required: true,
       unique: true,

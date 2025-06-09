@@ -22,7 +22,6 @@ const ClassLevelSchema = new mongoose.Schema(
         ref: "Student",
       },
     ],
-    //optional.
     subjects: [
       {
         type: Schema.Types.ObjectId,
@@ -35,7 +34,7 @@ const ClassLevelSchema = new mongoose.Schema(
         ref: "Teacher",
       },
     ],
-    id: {
+    classId: {
       type: String,
       required: true,
       unique: true,
