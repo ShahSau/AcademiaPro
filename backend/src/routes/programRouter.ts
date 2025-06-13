@@ -10,7 +10,6 @@ import {
   updateProgram,
   addTeachersToProgram,
   addStudentsToProgram,
-  addSubjectsToProgram,
   getTeachersInProgram,
   getStudentsInProgram,
   getSubjectsInProgram,
@@ -341,59 +340,6 @@ programRouter.post("/:id/teachers", verifyToken, isAdmin, addTeachersToProgram);
  *         description: Server error
  */
 programRouter.post("/:id/students", verifyToken, isAdmin, addStudentsToProgram);
-
-/**
- * @swagger
- * /api/v1/programs/{id}/subjects:
- *   post:
- *     tags:
- *      - Programs
- *     summary: Add subjects to a program
- *     description: Only admins can add subjects to a program
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - name: id
- *         in: path
- *         required: true
- *         description: ID of the program
- *         schema:
- *           type: string
- *       - in: header
- *         name: token
- *         required: true
- *         schema:
- *           type: string
- *           format: JWT
- *         description: Token for authorization.
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               subjectIds:
- *                 type: array
- *                 items:
- *                   type: string
- *                 description: List of subject IDs to add to the program
- *                 example: ["60c72b2f9b1d8c001c8e4f1a", "60c72b2f9b1d8c001c8e4f1b"]
- *     responses:
- *       201:
- *         description: Subjects added to program successfully
- *       400:
- *         description: Error adding subjects to program
- *       401:
- *         description: Unauthorized
- *       403:
- *         description: Forbidden
- *       404:
- *         description: Program not found
- *       500:
- *         description: Server error
- */
-programRouter.post("/:id/subjects", verifyToken, isAdmin, addSubjectsToProgram);
 
 /**
  * @swagger

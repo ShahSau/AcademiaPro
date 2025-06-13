@@ -209,33 +209,6 @@ const addStudentsToProgram = async (req: Request, res: Response) => {
   }
 };
 
-// Add subjects to a program
-const addSubjectsToProgram = async (req: Request, res: Response) => {
-  try {
-    const { subjectIds } = req.body;
-    const program = await Program.findOne({ programId: req.params.id });
-    if (!program) {
-      throw new Error("Program not found");
-    }
-    const subjects = await Program.find({ _id: { $in: subjectIds } });
-    if (subjects.length !== subjectIds.length) {
-      throw new Error("Some subjects not found");
-    }
-    program.subjects.push(...subjectIds);
-    await program.save();
-    res.status(201).json({
-      status: "success",
-      message: "Subjects added to program successfully",
-      data: program,
-    });
-  } catch (error) {
-    res.status(400).json({
-      status: "error",
-      message: (error as Error).message,
-    });
-  }
-};
-
 // Get all teachers in a program
 const getTeachersInProgram = async (req: Request, res: Response) => {
   try {
@@ -309,7 +282,6 @@ export {
   deleteProgram,
   addTeachersToProgram,
   addStudentsToProgram,
-  addSubjectsToProgram,
   getTeachersInProgram,
   getStudentsInProgram,
   getSubjectsInProgram,

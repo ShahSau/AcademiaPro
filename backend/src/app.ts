@@ -51,9 +51,9 @@ app.use("/api/v1/academic-terms", academicTermRouter);
 app.use("/api/v1/academic-years", academicYearRouter);
 app.use("/api/v1/year-groups", yearGroupRouter);
 app.use("/api/v1/programs", programRouter);
+app.use("/api/v1/subjects", subjectRouter);
 
 app.use("/api/v1/class-levels", classLevelRouter);
-app.use("/api/v1/subjects", subjectRouter);
 app.use("/api/v1/exams", examRouter);
 app.use("/api/v1/students", studentRouter);
 app.use("/api/v1/questions", questionsRouter);

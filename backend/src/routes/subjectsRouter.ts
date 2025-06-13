@@ -14,7 +14,7 @@ const subjectRouter = express.Router();
  * @swagger
  * /api/v1/subjects/{programID}:
  *   post:
- *     tags: 
+ *     tags:
  *      - Subjects
  *     summary: Create a new subject
  *     description: Only admins can create subjects
@@ -77,7 +77,7 @@ subjectRouter.post("/:programID", verifyToken, isAdmin, createSubject);
  * @swagger
  * /api/v1/subjects:
  *   get:
- *     tags: 
+ *     tags:
  *      - Subjects
  *     summary: Get all subjects
  *     description: Only admins can get all subjects
@@ -105,7 +105,7 @@ subjectRouter.get("/", verifyToken, isAdmin, getSubjects);
  * @swagger
  * /api/v1/subjects/{id}:
  *   get:
- *     tags: 
+ *     tags:
  *      - Subjects
  *     summary: Get a subject
  *     description: Only admins can get a subject
@@ -139,7 +139,7 @@ subjectRouter.get("/:id", verifyToken, isAdmin, getSubject);
  * @swagger
  * /api/v1/subjects/{id}:
  *   put:
- *     tags: 
+ *     tags:
  *      - Subjects
  *     summary: Update a subject
  *     description: Only admins can update a subject
@@ -174,10 +174,6 @@ subjectRouter.get("/:id", verifyToken, isAdmin, getSubject);
  *                 type: string
  *                 description: The description of the subject
  *                 example: The study of numbers and shapes
- *               academicTerm:
- *                 type: string
- *                 description: The academic term of the subject
- *                 example: Fall 2024
  *               duration:
  *                 type: string
  *                 description: The duration of the subject
