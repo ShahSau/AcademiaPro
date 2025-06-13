@@ -3,6 +3,8 @@ import cors from "cors";
 import swaggerUI from "swagger-ui-express";
 import specs from "./swagger";
 import connectToDB from "./config/dbConnect";
+import { globalErrHandler, notFoundErr } from "./middlewares/globalErrHandler";
+
 import adminRouter from "./routes/adminRouter";
 import academicTermRouter from "./routes/academicTermRouter";
 import academicYearRouter from "./routes/academicYearRouter";
@@ -13,8 +15,6 @@ import studentRouter from "./routes/studentRouter";
 import subjectRouter from "./routes/subjectsRouter";
 import teacherRouter from "./routes/teacherRouter";
 import yearGroupRouter from "./routes/yearGroupsRouter";
-import { globalErrHandler, notFoundErr } from "./middlewares/globalErrHandler";
-import noticeRouter from "./routes/noticeRouter";
 import complainRouter from "./routes/complainRouter";
 import attendanceRouter from "./routes/attendenceRouter";
 import eventsRouter from "./routes/eventsRouter";
@@ -90,7 +90,6 @@ app.use("/api/v1/exams", examRouter);
 // };
 
 app.use("/api/v1/students", studentRouter);
-app.use("/api/v1/notices", noticeRouter);
 app.use("/api/v1/complains", complainRouter);
 app.use("/api/v1/attendance", attendanceRouter);
 

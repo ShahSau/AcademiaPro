@@ -45,7 +45,10 @@ const createAcademicTerm = async (req: Request, res: Response) => {
 // get all academic terms
 const getAcademicTerms = async (req: Request, res: Response) => {
   try {
-    const academicTerms = await AcademicTerm.find({});
+    const academicTerms = await AcademicTerm.find({}).populate(
+      "createdBy",
+      "name email"
+    );
 
     res.status(201).json({
       status: "success",
@@ -63,7 +66,9 @@ const getAcademicTerms = async (req: Request, res: Response) => {
 // get academic term by id
 const getAcademicTerm = async (req: Request, res: Response) => {
   try {
-    const academicTerm = await AcademicTerm.findOne({ _id: req.params.id });
+    const academicTerm = await AcademicTerm.findOne({
+      _id: req.params.id,
+    }).populate("createdBy", "name email");
 
     if (!academicTerm) {
       throw new Error("Academic term not found");
@@ -92,7 +97,9 @@ const updateAcademicTerms = async (req: Request, res: Response) => {
       throw new Error("Admin not found");
     }
 
-    const academicTerm = await AcademicTerm.findOne({ id: req.params.id });
+    const academicTerm = await AcademicTerm.findOne({
+      id: req.params.id,
+    }).populate("createdBy", "name email");
 
     if (!academicTerm) {
       throw new Error("Academic term not found");

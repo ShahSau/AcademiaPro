@@ -50,7 +50,10 @@ const createAcademicYear = async (req: Request, res: Response) => {
 // get all Academic Years
 const getAcademicYears = async (req: Request, res: Response) => {
   try {
-    const academicYears = await AcademicYear.find({});
+    const academicYears = await AcademicYear.find({}).populate(
+      "teachers students",
+      "firstName lastName email"
+    );
 
     res.status(201).json({
       status: "success",
@@ -68,7 +71,9 @@ const getAcademicYears = async (req: Request, res: Response) => {
 // get single Academic Year
 const getAcademicYear = async (req: Request, res: Response) => {
   try {
-    const academicYears = await AcademicYear.findOne({ yearId: req.params.id });
+    const academicYears = await AcademicYear.findOne({
+      yearId: req.params.id,
+    }).populate("teachers students", "firstName lastName email");
 
     res.status(201).json({
       status: "success",
@@ -90,7 +95,7 @@ const updateAcademicYear = async (req: Request, res: Response) => {
     //check name exists
     const createAcademicYearFound = await AcademicYear.findOne({
       yearId: req.params.id,
-    });
+    }).populate("teachers students", "firstName lastName email");
     if (!createAcademicYearFound) {
       throw new Error("Academic year dosenot exists");
     }
@@ -153,7 +158,9 @@ const deleteAcademicYear = async (req: Request, res: Response) => {
 const addStudentsToAcademicYear = async (req: Request, res: Response) => {
   try {
     const { studentIds } = req.body;
-    const academicYear = await AcademicYear.findOne({ yearId: req.params.id });
+    const academicYear = await AcademicYear.findOne({
+      yearId: req.params.id,
+    }).populate("teachers students", "firstName lastName email");
     if (!academicYear) {
       throw new Error("Academic year not found");
     }
@@ -180,7 +187,9 @@ const addStudentsToAcademicYear = async (req: Request, res: Response) => {
 const addTeachersToAcademicYear = async (req: Request, res: Response) => {
   try {
     const { teacherIds } = req.body;
-    const academicYear = await AcademicYear.findOne({ yearId: req.params.id });
+    const academicYear = await AcademicYear.findOne({
+      yearId: req.params.id,
+    }).populate("teachers students", "firstName lastName email");
     if (!academicYear) {
       throw new Error("Academic year not found");
     }
