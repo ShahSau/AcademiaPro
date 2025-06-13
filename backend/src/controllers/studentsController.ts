@@ -3,7 +3,6 @@ import AcademicTerm from "../models/AcademicTerm";
 import Admin from "../models/Admin";
 import Exam from "../models/Exam";
 import ExamResult from "../models/ExamResults";
-import Question from "../models/Questions";
 import Student from "../models/Student";
 import generateToken from "../utils/generateToken";
 import { hashPassword, isPassMatched } from "../utils/helpers";
@@ -305,24 +304,14 @@ const writeExam = async (req: Request, res: Response) => {
     }
     //Get exam
     const examFound = await Exam.findById(req.params.examID)
-      .populate({
-        path: "questions",
-        model: "Question",
-      })
-      .populate("academicTerm");
 
     if (!examFound) {
       throw new Error("Exam not found");
     }
     //get questions
-    const questions = await Question.find({ exam: examFound?._id });
     //get students answers
     const studentAnswers = req.body.answers;
 
-    //check if student answered all questions
-    if (studentAnswers.length !== questions.length) {
-      throw new Error("You have not answered all the questions");
-    }
 
     // //check if student has already taken the exams
     const studentFoundInResults = await ExamResult.findOne({
@@ -338,126 +327,126 @@ const writeExam = async (req: Request, res: Response) => {
     }
 
     //Build report object
-    let correctanswers = 0;
-    //   let wrongAnswers = 0;
-    let status = ""; //failed/passed
-    let grade = 0;
-    let remarks = "";
-    let score = 0;
-    let answeredQuestions = [];
+    // let correctanswers = 0;
+    // //   let wrongAnswers = 0;
+    // let status = ""; //failed/passed
+    // let grade = 0;
+    // let remarks = "";
+    // let score = 0;
+    // let answeredQuestions = [];
 
     //check for answers
-    for (let i = 0; i < questions.length; i++) {
-      //find the question
-      const question = questions[i];
-      if (question.correctAnswer === studentAnswers[i]) {
-        if (question.correctAnswer === studentAnswers[i]) {
-          correctanswers++;
-          score++;
-          question.isCorrect = true;
-        } else {
-          //   wrongAnswers++;
-        }
-      }
-      //calculate reports
-      grade = (correctanswers / questions.length) * 100;
-      answeredQuestions = questions.map((question) => {
-        return {
-          question: question.question,
-          correctanswer: question.correctAnswer,
-          isCorrect: question.isCorrect,
-        };
-      });
+    // for (let i = 0; i < questions.length; i++) {
+    //   //find the question
+    //   const question = questions[i];
+    //   if (question.correctAnswer === studentAnswers[i]) {
+    //     if (question.correctAnswer === studentAnswers[i]) {
+    //       correctanswers++;
+    //       score++;
+    //       question.isCorrect = true;
+    //     } else {
+    //       //   wrongAnswers++;
+    //     }
+    //   }
+    //   //calculate reports
+    //   grade = (correctanswers / questions.length) * 100;
+    //   answeredQuestions = questions.map((question) => {
+    //     return {
+    //       question: question.question,
+    //       correctanswer: question.correctAnswer,
+    //       isCorrect: question.isCorrect,
+    //     };
+    //   });
 
-      //calculate status
-      if (grade >= 50) {
-        status = "Pass";
-      } else {
-        status = "Fail";
-      }
+    //   //calculate status
+    //   if (grade >= 50) {
+    //     status = "Pass";
+    //   } else {
+    //     status = "Fail";
+    //   }
 
-      //Remarks
-      if (grade >= 80) {
-        remarks = "Excellent";
-      } else if (grade >= 70) {
-        remarks = "Very Good";
-      } else if (grade >= 60) {
-        remarks = "Good";
-      } else if (grade >= 50) {
-        remarks = "Fair";
-      } else {
-        remarks = "Poor";
-      }
+    //   //Remarks
+    //   if (grade >= 80) {
+    //     remarks = "Excellent";
+    //   } else if (grade >= 70) {
+    //     remarks = "Very Good";
+    //   } else if (grade >= 60) {
+    //     remarks = "Good";
+    //   } else if (grade >= 50) {
+    //     remarks = "Fair";
+    //   } else {
+    //     remarks = "Poor";
+    //   }
 
-      //Generate Exam results
-      const examResults = await ExamResult.create({
-        studentID: studentFound?.studentId,
-        exam: examFound?._id,
-        grade,
-        score,
-        status,
-        remarks,
-        classLevel: examFound?.classLevel,
-        academicTerm: examFound?.academicTerm,
-        academicYear: examFound?.academicYear,
-        answeredQuestions: answeredQuestions,
-      });
-      // //push the results into
-      studentFound.examResults.push(examResults?.id);
-      // //save
-      await studentFound.save();
+    //   //Generate Exam results
+    //   const examResults = await ExamResult.create({
+    //     studentID: studentFound?.studentId,
+    //     exam: examFound?._id,
+    //     grade,
+    //     score,
+    //     status,
+    //     remarks,
+    //     classLevel: examFound?.classLevel,
+    //     academicTerm: examFound?.academicTerm,
+    //     academicYear: examFound?.academicYear,
+    //     answeredQuestions: answeredQuestions,
+    //   });
+    //   // //push the results into
+    //   studentFound.examResults.push(examResults?.id);
+    //   // //save
+    //   await studentFound.save();
 
-      //Promoting
-      const academicTerm = await AcademicTerm.findById(examFound.academicTerm);
-      //promote student to level 200
-      if (
-        academicTerm?.name === "1st term" &&
-        status === "Pass" &&
-        studentFound?.currentClassLevel === "Level 100"
-      ) {
-        studentFound.classLevels.push(new mongoose.Types.ObjectId("Level 200"));
-        studentFound.currentClassLevel = "Level 200";
-        await studentFound.save();
-      }
+    //   //Promoting
+    //   const academicTerm = await AcademicTerm.findById(examFound.academicTerm);
+    //   //promote student to level 200
+    //   if (
+    //     academicTerm?.name === "1st term" &&
+    //     status === "Pass" &&
+    //     studentFound?.currentClassLevel === "Level 100"
+    //   ) {
+    //     studentFound.classLevels.push(new mongoose.Types.ObjectId("Level 200"));
+    //     studentFound.currentClassLevel = "Level 200";
+    //     await studentFound.save();
+    //   }
 
-      //promote student to level 300
-      if (
-        academicTerm?.name === "2nd term" &&
-        status === "Pass" &&
-        studentFound?.currentClassLevel === "Level 200"
-      ) {
-        studentFound.classLevels.push(new mongoose.Types.ObjectId("Level 300"));
-        studentFound.currentClassLevel = "Level 300";
-        await studentFound.save();
-      }
+    //   //promote student to level 300
+    //   if (
+    //     academicTerm?.name === "2nd term" &&
+    //     status === "Pass" &&
+    //     studentFound?.currentClassLevel === "Level 200"
+    //   ) {
+    //     studentFound.classLevels.push(new mongoose.Types.ObjectId("Level 300"));
+    //     studentFound.currentClassLevel = "Level 300";
+    //     await studentFound.save();
+    //   }
 
-      //promote student to level 400
-      if (
-        academicTerm?.name === "3rd term" &&
-        status === "Pass" &&
-        studentFound?.currentClassLevel === "Level 300"
-      ) {
-        studentFound.classLevels.push(new mongoose.Types.ObjectId("Level 400"));
-        studentFound.currentClassLevel = "Level 400";
-        await studentFound.save();
-      }
+    //   //promote student to level 400
+    //   if (
+    //     academicTerm?.name === "3rd term" &&
+    //     status === "Pass" &&
+    //     studentFound?.currentClassLevel === "Level 300"
+    //   ) {
+    //     studentFound.classLevels.push(new mongoose.Types.ObjectId("Level 400"));
+    //     studentFound.currentClassLevel = "Level 400";
+    //     await studentFound.save();
+    //   }
 
-      //promote student to graduate
-      if (
-        academicTerm?.name === "4th term" &&
-        status === "Pass" &&
-        studentFound?.currentClassLevel === "Level 400"
-      ) {
-        studentFound.isGraduated = true;
-        studentFound.yearGraduated = new Date().toDateString();
-        await studentFound.save();
-      }
+    //   //promote student to graduate
+    //   if (
+    //     academicTerm?.name === "4th term" &&
+    //     status === "Pass" &&
+    //     studentFound?.currentClassLevel === "Level 400"
+    //   ) {
+    //     studentFound.isGraduated = true;
+    //     studentFound.yearGraduated = new Date().toDateString();
+    //     await studentFound.save();
+    //   }
 
-      res.status(200).json({
-        status: "success",
-        data: "You have submitted your exam. Check later for the results",
-      });
-    }
+    //   res.status(200).json({
+    //     status: "success",
+    //     data: "You have submitted your exam. Check later for the results",
+    //   });
+    // }
   } catch (error) {
     res.status(400).json({
       status: "error",

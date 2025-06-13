@@ -111,7 +111,7 @@ const getExam = async (req: Request, res: Response) => {
 };
 
 // Update Exam
-const updatExam = async (req: Request, res: Response) => {
+const updateExam = async (req: Request, res: Response) => {
   try {
     const {
       name,
@@ -174,37 +174,5 @@ const updatExam = async (req: Request, res: Response) => {
   }
 };
 
-// use this in here 
-const changeResultStatus = async (req: Request, res: Response) => {
-  const id = req.params.id;
 
-  if (!id) {
-    return res.status(400).json({ message: "Exam ID is required" });
-  }
-
-  try {
-    const exam = await Exam.findOne({ id });
-
-    if (!exam) {
-      return res.status(400).json({ message: "Exam does not exists" });
-    }
-
-    await Exam.updateOne(
-      { id },
-      {
-        ...exam,
-        resultPublished: !exam.resultPublished,
-      }
-    );
-
-    res
-      .status(200)
-      .json({ message: "Exam results status updated successfully" });
-  } catch (error) {
-    res.status(500).json({
-      message: "Error changing exam result status",
-      error: (error as Error).message,
-    });
-  }
-};
-export { createExam, getExams, getExam, updatExam };
+export { createExam, getExams, getExam, updateExam };

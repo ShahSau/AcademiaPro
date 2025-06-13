@@ -9,7 +9,6 @@ import academicYearRouter from "./routes/academicYearRouter";
 import classLevelRouter from "./routes/classLevelRouter";
 import examRouter from "./routes/examRouter";
 import programRouter from "./routes/programRouter";
-import questionsRouter from "./routes/questionRouter";
 import studentRouter from "./routes/studentRouter";
 import subjectRouter from "./routes/subjectsRouter";
 import teacherRouter from "./routes/teacherRouter";
@@ -54,10 +53,43 @@ app.use("/api/v1/programs", programRouter);
 app.use("/api/v1/subjects", subjectRouter);
 app.use("/api/v1/class-levels", classLevelRouter);
 app.use("/api/v1/events", eventsRouter);
-
 app.use("/api/v1/exams", examRouter);
+//exam result 
+// use this in here 
+// const changeResultStatus = async (req: Request, res: Response) => {
+//   const id = req.params.id;
+
+//   if (!id) {
+//     return res.status(400).json({ message: "Exam ID is required" });
+//   }
+
+//   try {
+//     const exam = await Exam.findOne({ id });
+
+//     if (!exam) {
+//       return res.status(400).json({ message: "Exam does not exists" });
+//     }
+
+//     await Exam.updateOne(
+//       { id },
+//       {
+//         ...exam,
+//         resultPublished: !exam.resultPublished,
+//       }
+//     );
+
+//     res
+//       .status(200)
+//       .json({ message: "Exam results status updated successfully" });
+//   } catch (error) {
+//     res.status(500).json({
+//       message: "Error changing exam result status",
+//       error: (error as Error).message,
+//     });
+//   }
+// };
+
 app.use("/api/v1/students", studentRouter);
-app.use("/api/v1/questions", questionsRouter);
 app.use("/api/v1/notices", noticeRouter);
 app.use("/api/v1/complains", complainRouter);
 app.use("/api/v1/attendance", attendanceRouter);

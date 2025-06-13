@@ -63,12 +63,6 @@ const examSchema = new mongoose.Schema(
       default: "pending",
       enum: ["pending", "live"],
     },
-    questions: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Question",
-      },
-    ],
     classLevel: {
       type: Schema.Types.ObjectId,
       ref: "ClassLevel",
@@ -88,7 +82,7 @@ const examSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    id: {
+    examId: {
       type: String,
       required: true,
       unique: true,

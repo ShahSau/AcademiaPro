@@ -5,7 +5,7 @@ import {
   getExams,
   createExam,
   getExam,
-  updatExam,
+  updateExam,
 } from "../controllers/examController";
 
 const examRouter = express.Router();
@@ -264,9 +264,7 @@ examRouter.get("/:id", verifyToken, isTeacher, getExam);
  *       500:
  *         description: Internal server error
  */
-examRouter.put("/:id", verifyToken, isTeacher, updatExam);
+examRouter.put("/:id", verifyToken, isTeacher, updateExam);
 
-//todo
-//get all questions for an exam by teacher
 
 export default examRouter;

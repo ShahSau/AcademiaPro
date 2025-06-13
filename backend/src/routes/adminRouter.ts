@@ -7,7 +7,6 @@ import {
   updateAdminPasswordController,
   getAllAdminsController,
 } from "../controllers/adminController";
-// import advancedResults from "../../middlewares/advancedResults";
 
 const adminRouter = express.Router();
 
