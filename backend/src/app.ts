@@ -52,15 +52,15 @@ app.use("/api/v1/academic-years", academicYearRouter);
 app.use("/api/v1/year-groups", yearGroupRouter);
 app.use("/api/v1/programs", programRouter);
 app.use("/api/v1/subjects", subjectRouter);
-
 app.use("/api/v1/class-levels", classLevelRouter);
+app.use("/api/v1/events", eventsRouter);
+
 app.use("/api/v1/exams", examRouter);
 app.use("/api/v1/students", studentRouter);
 app.use("/api/v1/questions", questionsRouter);
 app.use("/api/v1/notices", noticeRouter);
 app.use("/api/v1/complains", complainRouter);
 app.use("/api/v1/attendance", attendanceRouter);
-app.use("/api/v1/events", eventsRouter);
 
 //Error middlewares
 app.use(notFoundErr);

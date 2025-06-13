@@ -7,6 +7,9 @@ import {
   getClassLevel,
   updateClassLevel,
   deleteClassLevel,
+  addremoveSubjects,
+  addremoveTeachers,
+  addremoveStudents,
 } from "../controllers/classLevelController";
 
 const classLevelRouter = express.Router();
@@ -16,7 +19,7 @@ const classLevelRouter = express.Router();
  * /api/v1/class-levels:
  *   post:
  *     summary: Create a new class level
- *     tags: 
+ *     tags:
  *      - Class Level
  *     security:
  *       - bearerAuth: []
@@ -60,7 +63,7 @@ classLevelRouter.post("/", verifyToken, isAdmin, createClassLevel);
  * /api/v1/class-levels:
  *   get:
  *     summary: Get all class levels
- *     tags: 
+ *     tags:
  *      - Class Level
  *     security:
  *       - bearerAuth: []
@@ -87,7 +90,7 @@ classLevelRouter.get("/", verifyToken, isAdmin, getClassLevels);
  * /api/v1/class-levels/{id}:
  *   get:
  *     summary: Get a class level by id
- *     tags: 
+ *     tags:
  *      - Class Level
  *     security:
  *       - bearerAuth: []
@@ -120,7 +123,7 @@ classLevelRouter.get("/:id", verifyToken, isAdmin, getClassLevel);
  * /api/v1/class-levels/{id}:
  *   put:
  *     summary: Update a class level
- *     tags: 
+ *     tags:
  *      - Class Level
  *     security:
  *       - bearerAuth: []
@@ -170,7 +173,7 @@ classLevelRouter.put("/:id", verifyToken, isAdmin, updateClassLevel);
  * /api/v1/class-levels/{id}:
  *   delete:
  *     summary: Delete a class level
- *     tags: 
+ *     tags:
  *      - Class Level
  *     security:
  *       - bearerAuth: []
@@ -197,5 +200,134 @@ classLevelRouter.put("/:id", verifyToken, isAdmin, updateClassLevel);
  *         description: Internal server error
  */
 classLevelRouter.delete("/:id", verifyToken, isAdmin, deleteClassLevel);
+
+/**
+ * @swagger
+ * /api/v1/class-levels/{id}/subjects:
+ *   put:
+ *     summary: Add or remove subjects from a class level
+ *     tags:
+ *      - Class Level
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Class level id
+ *       - in: header
+ *         name: token
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: JWT
+ *         description: Token for authorization.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               subjectId:
+ *                 type: string
+ *                 description: ID of the subject to add or remove
+ *               action:
+ *                 type: string
+ *                 enum: [add, remove]
+ *                 description: Action to perform on the subject (add or remove)
+ *     responses:
+ *       201:
+ *         description: Subjects added or removed successfully
+ */
+classLevelRouter.put("/:id/subjects", verifyToken, isAdmin, addremoveSubjects);
+
+/**
+ * @swagger
+ * /api/v1/class-levels/{id}/teachers:
+ *   put:
+ *     summary: Add or remove teachers from a class level
+ *     tags:
+ *      - Class Level
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Class level id
+ *       - in: header
+ *         name: token
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: JWT
+ *         description: Token for authorization.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               teacherId:
+ *                 type: string
+ *                 description: ID of the teacher to add or remove
+ *               action:
+ *                 type: string
+ *                 enum: [add, remove]
+ *                 description: Action to perform on the teacher (add or remove)
+ *     responses:
+ *       201:
+ *         description: teachers added or removed successfully
+ */
+classLevelRouter.put("/:id/teachers", verifyToken, isAdmin, addremoveTeachers);
+
+/**
+ * @swagger
+ * /api/v1/class-levels/{id}/students:
+ *   put:
+ *     summary: Add or remove students from a class level
+ *     tags:
+ *      - Class Level
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Class level id
+ *       - in: header
+ *         name: token
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: JWT
+ *         description: Token for authorization.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               studentId:
+ *                 type: string
+ *                 description: ID of the student to add or remove
+ *               action:
+ *                 type: string
+ *                 enum: [add, remove]
+ *                 description: Action to perform on the student (add or remove)
+ *     responses:
+ *       201:
+ *         description: students added or removed successfully
+ */
+classLevelRouter.put("/:id/students", verifyToken, isAdmin, addremoveStudents);
 
 export default classLevelRouter;

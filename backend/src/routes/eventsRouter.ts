@@ -36,7 +36,7 @@ const eventsRouter = express.Router();
  *           schema:
  *             type: object
  *             properties:
- *               title:
+ *               name:
  *                 type: string
  *                 description: The title of the event
  *               description:
@@ -46,11 +46,21 @@ const eventsRouter = express.Router();
  *                 type: string
  *                 format: date-time
  *                 description: The date of the event
- *               classLevels:
- *                 type: array
- *                 items:
- *                   type: string
- *                   description: The IDs of the class levels associated with the event
+ *               location:
+ *                type: string
+ *                description: The location of the event
+ *               classId:
+ *                 type: string
+ *                 description: The ID of the class level associated with the event
+ *     responses:
+ *       201:
+ *         description: Event created successfully
+ *       400:
+ *         description: Invalid request data
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Internal server error
  */
 eventsRouter.post("/", verifyToken, isAdmin, createEvent);
 
@@ -62,8 +72,10 @@ eventsRouter.post("/", verifyToken, isAdmin, createEvent);
  *     tags:
  *       - Events
  *     responses:
- *       200:
- *         description: A list of events
+ *       201:
+ *        description: Events retrieved successfully
+ *       500:
+ *         description: Internal server error
  */
 eventsRouter.get("/", getAllEvents);
 
@@ -81,6 +93,13 @@ eventsRouter.get("/", getAllEvents);
  *         schema:
  *           type: string
  *         description: The ID of the event
+ *     responses:
+ *       200:
+ *         description: Event retrieved successfully
+ *       404:
+ *         description: Event not found
+ *       500:
+ *         description: Internal server error
  */
 eventsRouter.get("/:id", getEventById);
 
@@ -107,6 +126,40 @@ eventsRouter.get("/:id", getEventById);
  *         schema:
  *           type: string
  *         description: The ID of the event to update
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 description: The title of the event
+ *               description:
+ *                 type: string
+ *                 description: The description of the event
+ *               date:
+ *                 type: string
+ *                 format: date-time
+ *                 description: The date of the event
+ *               location:
+ *                type: string
+ *                description: The location of the event
+ *               classId:
+ *                 type: string
+ *                 description: The ID of the class level associated with the event
+ *     responses:
+ *       200:
+ *         description: Event updated successfully
+ *       400:
+ *         description: Invalid request data
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: Event not found
+ *       500:
+ *         description: Internal server error
  */
 eventsRouter.put("/:id", verifyToken, isAdmin, updateEvent);
 
@@ -114,12 +167,18 @@ eventsRouter.put("/:id", verifyToken, isAdmin, updateEvent);
  * @swagger
  * /api/v1/events/{id}:
  *   delete:
- *     summary: Delete an event
+ *     summary: Delete a event by ID
  *     tags:
- *       - Events
+ *      - Events
  *     security:
  *       - bearerAuth: []
  *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: event id
  *       - in: header
  *         name: token
  *         required: true
@@ -127,13 +186,14 @@ eventsRouter.put("/:id", verifyToken, isAdmin, updateEvent);
  *           type: string
  *           format: JWT
  *         description: Token for authorization.
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *         description: The ID of the event to delete
- */
+ *     responses:
+ *       201:
+ *         description: Event deleted successfully
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Internal server error
+ * */
 eventsRouter.delete("/:id", verifyToken, isAdmin, deleteEvent);
 
 /**
@@ -150,6 +210,13 @@ eventsRouter.delete("/:id", verifyToken, isAdmin, deleteEvent);
  *         schema:
  *           type: string
  *         description: The ID of the class level to filter events by
+*     responses:
+*      200:
+*       description: Events retrieved successfully for the specified class level
+*      404:
+*       description: Class level not found or no events associated with it
+*      500:
+*       description: Internal server error
  */
 eventsRouter.get("/class-level/:classLevelId", getEventsByClassLevel);
 

@@ -1,13 +1,13 @@
 import Events from "../models/Events";
 import type { Request, Response } from "express";
 import { v4 as uuidv4 } from "uuid";
-import { Types } from "mongoose";
 import Admin from "../models/Admin";
+import ClassLevel from "../models/ClassLevel";
 
 // Create a new event
 const createEvent = async (req: Request, res: Response) => {
   try {
-    const { name, description, date, location, classLevels } = req.body;
+    const { name, description, date, location, classId } = req.body;
     const token = req.headers.token;
 
     // Validate input
@@ -21,14 +21,23 @@ const createEvent = async (req: Request, res: Response) => {
       throw new Error("Admin not found");
     }
 
+    // Validate classLevels
+    const classLevel = await ClassLevel.findOne({ classId });
+    if (!classLevel) {
+      return res.status(400).json({
+        status: "error",
+        message: "Invalid class level ID",
+      });
+    }
+
     const event = new Events({
       name,
       description,
       date,
       location,
       createdBy: admin._id,
-      classLevels: classLevels.map((id: string) => new Types.ObjectId(id)),
-      id: uuidv4().replace(/-/g, "").slice(0, 14),
+      classLevels: classLevel._id,
+      eventId: uuidv4().replace(/-/g, "").slice(0, 14),
     });
 
     await event.save();
@@ -44,12 +53,12 @@ const createEvent = async (req: Request, res: Response) => {
       message: (error as Error).message,
     });
   }
-}
+};
 
 // Get all events
 const getAllEvents = async (req: Request, res: Response) => {
   try {
-    const events = await Events.find().populate("createdBy", "name email").populate("classLevels", "name");
+    const events = await Events.find();
 
     res.status(200).json({
       status: "success",
@@ -61,24 +70,14 @@ const getAllEvents = async (req: Request, res: Response) => {
       message: (error as Error).message,
     });
   }
-}
+};
 
 // Get a specific event by ID
 const getEventById = async (req: Request, res: Response) => {
   try {
     const eventId = req.params.id;
 
-    // Validate eventId
-    if (!Types.ObjectId.isValid(eventId)) {
-      return res.status(400).json({
-        status: "error",
-        message: "Invalid event ID",
-      });
-    }
-
-    const event = await Events.findById(eventId)
-      .populate("createdBy", "name email")
-      .populate("classLevels", "name");
+    const event = await Events.findOne({ eventId });
 
     if (!event) {
       return res.status(404).json({
@@ -97,22 +96,14 @@ const getEventById = async (req: Request, res: Response) => {
       message: (error as Error).message,
     });
   }
-}
+};
 
 // Update an event
 const updateEvent = async (req: Request, res: Response) => {
   try {
     const eventId = req.params.id;
-    const { name, description, date, location, classLevels } = req.body;
+    const { name, description, date, location } = req.body;
     const token = req.headers.token;
-
-    // Validate eventId
-    if (!Types.ObjectId.isValid(eventId)) {
-      return res.status(400).json({
-        status: "error",
-        message: "Invalid event ID",
-      });
-    }
 
     // Check if the admin exists
     const admin = await Admin.findOne({ token });
@@ -120,18 +111,16 @@ const updateEvent = async (req: Request, res: Response) => {
       throw new Error("Admin not found");
     }
 
-    const event = await Events.findByIdAndUpdate(
-      eventId,
+    const event = await Events.findOneAndUpdate(
+      { eventId },
       {
         name,
         description,
         date,
         location,
-        createdBy: admin._id,
-        classLevels: classLevels.map((id: string) => new Types.ObjectId(id)),
       },
       { new: true }
-    ).populate("createdBy", "name email").populate("classLevels", "name");
+    );
 
     if (!event) {
       return res.status(404).json({
@@ -151,22 +140,14 @@ const updateEvent = async (req: Request, res: Response) => {
       message: (error as Error).message,
     });
   }
-}
+};
 
 // Delete an event
 const deleteEvent = async (req: Request, res: Response) => {
   try {
     const eventId = req.params.id;
 
-    // Validate eventId
-    if (!Types.ObjectId.isValid(eventId)) {
-      return res.status(400).json({
-        status: "error",
-        message: "Invalid event ID",
-      });
-    }
-
-    const event = await Events.findByIdAndDelete(eventId);
+    const event = await Events.findOneAndDelete({ eventId });
 
     if (!event) {
       return res.status(404).json({
@@ -185,24 +166,14 @@ const deleteEvent = async (req: Request, res: Response) => {
       message: (error as Error).message,
     });
   }
-}
+};
 
 // Get events by class level
 const getEventsByClassLevel = async (req: Request, res: Response) => {
   try {
     const classLevelId = req.params.classLevelId;
 
-    // Validate classLevelId
-    if (!Types.ObjectId.isValid(classLevelId)) {
-      return res.status(400).json({
-        status: "error",
-        message: "Invalid class level ID",
-      });
-    }
-
-    const events = await Events.find({ classLevels: classLevelId })
-      .populate("createdBy", "name email")
-      .populate("classLevels", "name");
+    const events = await Events.find({ classLevels: classLevelId });
 
     if (events.length === 0) {
       return res.status(404).json({
@@ -221,7 +192,7 @@ const getEventsByClassLevel = async (req: Request, res: Response) => {
       message: (error as Error).message,
     });
   }
-}
+};
 
 // Export the functions
 export {

@@ -17,6 +17,11 @@ const EventSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    eventId: {
+      type: String,
+      required: true,
+      unique: true,
+    },
     createdBy: {
       type: Schema.Types.ObjectId,
       ref: "Admin",
