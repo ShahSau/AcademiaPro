@@ -1,4 +1,7 @@
+import AcademicTerm from "../models/AcademicTerm";
+import ClassLevel from "../models/ClassLevel";
 import Exam from "../models/Exam";
+import Subject from "../models/Subject";
 import Teacher from "../models/Teacher";
 import type { Request, Response } from "express";
 import { v4 as uuidv4 } from "uuid";
@@ -9,18 +12,15 @@ const createExam = async (req: Request, res: Response) => {
     const {
       name,
       description,
-      subject,
-      program,
-      academicTerm,
+      subjectId,
+      passMark,
+      totalMark,
+      academicTermId,
       duration,
       examDate,
       examTime,
-      examType,
-      academicYear,
-      passMark,
-      totalMark,
-      classLevel,
       examStatus,
+      classLevelId,
     } = req.body;
     //check name exists
     const examFound = await Exam.findOne({ name });
@@ -34,23 +34,38 @@ const createExam = async (req: Request, res: Response) => {
       throw new Error("Teacher not found");
     }
 
+    //check if subject exists
+    const subject = await Subject.findOne({ subjectId });
+    if (!subject) {
+      throw new Error("Subject not found");
+    }
+
+    //check if academic term exists
+    const academicTerm = await AcademicTerm.findOne({ id:academicTermId });
+    if (!academicTerm) {
+      throw new Error("Academic term not found");
+    }
+
+    //check if class level exists
+    const classLevel = await ClassLevel.findOne({ classId:classLevelId });
+    if (!classLevel) {
+      throw new Error("Class level not found");
+    }
+
     const exam = new Exam({
       name,
       description,
-      subject,
-      program,
+      subject: subject._id,
       passMark,
       totalMark,
-      academicTerm,
+      academicTerm: academicTerm._id,
       duration,
       examDate,
       examTime,
-      examType,
       examStatus,
-      academicYear,
-      classLevel,
-      createdBy: teacher.teacherId,
-      id: uuidv4().replace(/-/g, "").slice(0, 18),
+      classLevel: classLevel._id,
+      createdBy: teacher._id,
+      examId: uuidv4().replace(/-/g, "").slice(0, 18),
     });
 
     await exam.save();
@@ -73,7 +88,6 @@ const getExams = async (req: Request, res: Response) => {
   try {
     const exams = await Exam.find({})
       .populate("subject")
-      .populate("program")
       .populate("academicTerm")
       .populate("createdBy");
     res.status(200).json({
@@ -92,9 +106,8 @@ const getExams = async (req: Request, res: Response) => {
 // Get Exam
 const getExam = async (req: Request, res: Response) => {
   try {
-    const exam = await Exam.findOne({ id: req.params.id })
+    const exam = await Exam.findOne({ examId: req.params.id })
       .populate("subject")
-      .populate("program")
       .populate("academicTerm")
       .populate("createdBy");
     res.status(200).json({
@@ -113,19 +126,8 @@ const getExam = async (req: Request, res: Response) => {
 // Update Exam
 const updateExam = async (req: Request, res: Response) => {
   try {
-    const {
-      name,
-      description,
-      subject,
-      program,
-      academicTerm,
-      duration,
-      examDate,
-      examTime,
-      examType,
-      academicYear,
-      classLevel,
-    } = req.body;
+    const { name, description, duration, examDate, examTime, examStatus } =
+      req.body;
     //check name exists
     const examFound = await Exam.findOne({ id: req.params.id });
 
@@ -145,16 +147,10 @@ const updateExam = async (req: Request, res: Response) => {
       {
         name,
         description,
-        subject,
-        program,
-        academicTerm,
         duration,
         examDate,
         examTime,
-        examType,
-        academicYear,
-        classLevel,
-        createdBy: teacher.id,
+        examStatus,
       },
       {
         new: true,
@@ -174,5 +170,31 @@ const updateExam = async (req: Request, res: Response) => {
   }
 };
 
+// change exam status
+const changeExamStatus = async (req: Request, res: Response) => {
+  try {
+    const exam = await Exam.findOne({ examId: req.params.id });
+    if (!exam) {
+      return res.status(404).json({ message: "Exam not found" });
+    }
+    const updatedExam = await Exam.findOneAndUpdate(
+      { examId: req.params.id },
+      {
+        examStatus: exam.examStatus === "pending" ? "live" : "pending",
+      },
+      { new: true }
+    );
+    res.status(200).json({
+      message: "Exam status updated successfully",
+      data: updatedExam,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Error updating exam status",
+      error: (error as Error).message,
+    });
+  }
+};
 
-export { createExam, getExams, getExam, updateExam };
+export { createExam, getExams, getExam, updateExam, changeExamStatus };
+

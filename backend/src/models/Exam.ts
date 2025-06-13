@@ -16,11 +16,6 @@ const examSchema = new mongoose.Schema(
       ref: "Subject",
       required: true,
     },
-    program: {
-      type: Schema.Types.ObjectId,
-      ref: "Program",
-      required: true,
-    },
     passMark: {
       type: Number,
       required: true,
@@ -31,7 +26,6 @@ const examSchema = new mongoose.Schema(
       required: true,
       default: 100,
     },
-
     academicTerm: {
       type: Schema.Types.ObjectId,
       ref: "AcademicTerm",
@@ -51,12 +45,6 @@ const examSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    examType: {
-      type: String,
-      required: true,
-      default: "Quiz",
-      enum: ["Quiz", "Exam"],
-    },
     examStatus: {
       type: String,
       required: true,
@@ -72,15 +60,6 @@ const examSchema = new mongoose.Schema(
       type: Schema.Types.ObjectId,
       ref: "Teacher",
       required: true,
-    },
-    academicYear: {
-      type: Schema.Types.ObjectId,
-      ref: "AcademicYear",
-      required: true,
-    },
-    resultPublished: {
-      type: Boolean,
-      default: false,
     },
     examId: {
       type: String,

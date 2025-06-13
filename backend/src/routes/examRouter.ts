@@ -1,11 +1,13 @@
 import express from "express";
 import verifyToken from "../middlewares/verifyToken";
 import isTeacher from "../middlewares/isTeacher";
+import isTeacherORAdmin from "../middlewares/isTeacherORAdmin";
 import {
   getExams,
   createExam,
   getExam,
   updateExam,
+  changeExamStatus,
 } from "../controllers/examController";
 
 const examRouter = express.Router();
@@ -15,7 +17,7 @@ const examRouter = express.Router();
  * /api/v1/exams:
  *   get:
  *     summary: Get all exams
- *     tags: 
+ *     tags:
  *      - Exams
  *     security:
  *       - bearerAuth: []
@@ -35,14 +37,14 @@ const examRouter = express.Router();
  *       500:
  *         description: Internal server error
  */
-examRouter.get("/", verifyToken, isTeacher, getExams);
+examRouter.get("/", verifyToken, isTeacherORAdmin, getExams);
 
 /**
  * @swagger
  * /api/v1/exams:
  *   post:
  *     summary: Create a new exam
- *     tags: 
+ *     tags:
  *      - Exams
  *     security:
  *       - bearerAuth: []
@@ -69,13 +71,9 @@ examRouter.get("/", verifyToken, isTeacher, getExams);
  *                 type: string
  *                 description: The description of the exam
  *                 example: Midterm exam for the 2023/2024 academic year
- *               subject:
+ *               subjectId:
  *                 type: string
  *                 description: ID of the subject
- *                 example: 60f7d1b7b6f9b3b3b4b3b4b3
- *               program:
- *                 type: string
- *                 description: ID of the program
  *                 example: 60f7d1b7b6f9b3b3b4b3b4b3
  *               passMark:
  *                 type: number
@@ -85,10 +83,6 @@ examRouter.get("/", verifyToken, isTeacher, getExams);
  *                 type: number
  *                 description: The total mark for the exam
  *                 example: 100
- *               academicTerm:
- *                 type: string
- *                 description: ID of the academic term
- *                 example: 60f7d1b7b6f9b3b3b4b3b4b3
  *               duration:
  *                 type: string
  *                 description: The duration of the exam
@@ -101,21 +95,16 @@ examRouter.get("/", verifyToken, isTeacher, getExams);
  *                 type: string
  *                 description: The time of the exam
  *                 example: 10:00
- *               examType:
- *                 type: string
- *                 description: The type of the exam
- *                 example: Exam
- *                 allowedValues: [Quiz, Exam]
  *               examStatus:
  *                 type: string
  *                 description: The status of the exam
  *                 example: pending
  *                 allowedValues: [pending, live]
- *               academicYear:
+ *               academicTermId:
  *                 type: string
- *                 description: ID of the academic year
+ *                 description: ID of the academic term
  *                 example: 60f7d1b7b6f9b3b3b4b3b4b3
- *               classLevel:
+ *               classLevelId:
  *                 type: string
  *                 description: ID of the class level
  *                 example: 60f7d1b7b6f9b3b3b4b3b4b3
@@ -136,7 +125,7 @@ examRouter.post("/", verifyToken, isTeacher, createExam);
  * /api/v1/exams/{id}:
  *   get:
  *     summary: Get exam by ID
- *     tags: 
+ *     tags:
  *      - Exams
  *     security:
  *       - bearerAuth: []
@@ -164,14 +153,14 @@ examRouter.post("/", verifyToken, isTeacher, createExam);
  *       500:
  *         description: Internal server error
  */
-examRouter.get("/:id", verifyToken, isTeacher, getExam);
+examRouter.get("/:id", verifyToken, isTeacherORAdmin, getExam);
 
 /**
  * @swagger
  * /api/v1/exams/{id}:
  *   put:
  *     summary: Update exam by ID
- *     tags: 
+ *     tags:
  *      - Exams
  *     security:
  *       - bearerAuth: []
@@ -204,14 +193,6 @@ examRouter.get("/:id", verifyToken, isTeacher, getExam);
  *                 type: string
  *                 description: The description of the exam
  *                 example: Midterm exam for the 2023/2024 academic year
- *               subject:
- *                 type: string
- *                 description: ID of the subject
- *                 example: 60f7d1b7b6f9b3b3b4b3b4b3
- *               program:
- *                 type: string
- *                 description: ID of the program
- *                 example: 60f7d1b7b6f9b3b3b4b3b4b3
  *               passMark:
  *                 type: number
  *                 description: The pass mark for the exam
@@ -220,10 +201,6 @@ examRouter.get("/:id", verifyToken, isTeacher, getExam);
  *                 type: number
  *                 description: The total mark for the exam
  *                 example: 100
- *               academicTerm:
- *                 type: string
- *                 description: ID of the academic term
- *                 example: 60f7d1b7b6f9b3b3b4b3b4b3
  *               duration:
  *                 type: string
  *                 description: The duration of the exam
@@ -236,24 +213,11 @@ examRouter.get("/:id", verifyToken, isTeacher, getExam);
  *                 type: string
  *                 description: The time of the exam
  *                 example: 10:00
- *               examType:
- *                 type: string
- *                 description: The type of the exam
- *                 example: Exam
- *                 allowedValues: [Quiz, Exam]
  *               examStatus:
  *                 type: string
  *                 description: The status of the exam
  *                 example: pending
  *                 allowedValues: [pending, live]
- *               academicYear:
- *                 type: string
- *                 description: ID of the academic year
- *                 example: 60f7d1b7b6f9b3b3b4b3b4b3
- *               classLevel:
- *                 type: string
- *                 description: ID of the class level
- *                 example: 60f7d1b7b6f9b3b3b4b3b4b3
  *     responses:
  *       200:
  *         description: Exam updated successfully
@@ -266,5 +230,44 @@ examRouter.get("/:id", verifyToken, isTeacher, getExam);
  */
 examRouter.put("/:id", verifyToken, isTeacher, updateExam);
 
+/**
+ * @swagger
+ * /api/v1/exams/{id}/change-status:
+ *   put:
+ *     summary: Change exam status by ID
+ *     tags:
+ *      - Exams
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Exam ID
+ *       - in: header
+ *         name: token
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: JWT
+ *         description: Token for authorization.
+ *     responses:
+ *       200:
+ *         description: Exam status updated successfully
+ *       404:
+ *         description: Exam not found
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Internal server error
+ */
+examRouter.put(
+  "/:id/change-status",
+  verifyToken,
+  isTeacherORAdmin,
+  changeExamStatus
+);
 
 export default examRouter;

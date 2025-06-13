@@ -1,5 +1,6 @@
 import type { Request, Response, NextFunction } from "express";
 import Admin from "../models/Admin";
+import Teacher from "../models/Teacher";
 
 const isTeacherORAdmin = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -8,9 +9,14 @@ const isTeacherORAdmin = async (req: Request, res: Response, next: NextFunction)
       return res.status(401).json({ message: "Access denied, token missing" });
     }
     // Find the user by ID from the token
-    const user = await Admin.findOne({ token });
+    let user = await Admin.findOne({ token }) ;
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      // If not found, try to find a teacher
+      user = await Teacher.findOne({ token });
+
+      if (!user) {
+        return res.status(401).json({ message: "Access denied, invalid token" });
+      }
     }
 
     // Check if user is an admin
